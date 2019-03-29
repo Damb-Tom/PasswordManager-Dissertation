@@ -39,7 +39,7 @@
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_weight=".5"
-                    android:text="@string/login_button" android:textAlignment="center"
+                    android:text="@string/register_button" android:textAlignment="center"
                     android:fontFamily="@font/montserrat_bold" android:textColorLink="@color/colorAccent"
                     android:textColor="@android:color/white"/>
             <Button android:id="@+id/login_button"
@@ -47,7 +47,7 @@
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
                     android:layout_weight=".5"
-                    android:text="@string/register_button" android:textAlignment="center"
+                    android:text="@string/login_button" android:textAlignment="center"
                     android:fontFamily="@font/montserrat_bold" android:textColorLink="@color/colorAccent"
                     android:textColor="@android:color/white"/>
 
