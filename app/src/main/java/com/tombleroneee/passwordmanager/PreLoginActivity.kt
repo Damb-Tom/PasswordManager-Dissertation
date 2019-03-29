@@ -1,20 +1,17 @@
 package com.tombleroneee.passwordmanager
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import kotlinx.android.synthetic.main.activity_fullscreen.*
+import kotlinx.android.synthetic.main.activity_pre_login.*
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
-class FullscreenActivity : AppCompatActivity() {
+class PreLoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_fullscreen)
+        setContentView(R.layout.activity_pre_login)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         fullscreen_content.systemUiVisibility =
@@ -24,5 +21,14 @@ class FullscreenActivity : AppCompatActivity() {
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                 View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+
+        login_button.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
+
+        register_button.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+        }
+
     }
 }
