@@ -15,8 +15,8 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_register)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        // Hide Navigation etc
         fullscreen_content.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LOW_PROFILE or
                 View.SYSTEM_UI_FLAG_FULLSCREEN or
