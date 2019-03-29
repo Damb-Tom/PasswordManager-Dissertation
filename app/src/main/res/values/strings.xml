@@ -4,4 +4,10 @@
     // Login
     <string name="login_button">Login</string>
     <string name="register_button">Register</string>
+
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="title_activity_register">RegisterActivity</string>
 </resources>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="#0099cc"
+             tools:context=".LoginActivity">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+    <TextView android:id="@+id/fullscreen_content"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:keepScreenOn="true"
+              android:textColor="@android:color/white"
+              android:textSize="50sp"
+              android:gravity="center"
+              android:text="@string/app_name" android:textAlignment="center"
+              android:fontFamily="@font/montserrat_bold" android:textStyle="bold"/>
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+    <FrameLayout android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:fitsSystemWindows="false">
+
+        <LinearLayout android:id="@+id/fullscreen_content_controls"
+                      style="?metaButtonBarStyle"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="bottom|center_horizontal"
+                      android:background="@color/black_overlay"
+                      android:orientation="horizontal"
+                      tools:ignore="UselessParent">
+
+            <Button android:id="@+id/register_button"
+                    style="?metaButtonBarButtonStyle"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:text="@string/login_button" android:textAlignment="center"
+                    android:fontFamily="@font/montserrat_bold" android:textColorLink="@color/colorAccent"
+                    android:textColor="@android:color/white"/>
+            <Button android:id="@+id/login_button"
+                    style="?metaButtonBarButtonStyle"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".5"
+                    android:text="@string/register_button" android:textAlignment="center"
+                    android:fontFamily="@font/montserrat_bold" android:textColorLink="@color/colorAccent"
+                    android:textColor="@android:color/white"/>
+
+        </LinearLayout>
+    </FrameLayout>
+
+</FrameLayout>

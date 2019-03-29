@@ -10,7 +10,19 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name=".FullscreenActivity"
+                android:name=".RegisterActivity"
+                android:configChanges="orientation|keyboardHidden|screenSize"
+                android:label="@string/title_activity_register"
+                android:theme="@style/FullscreenTheme">
+        </activity>
+        <activity
+                android:name=".LoginActivity"
+                android:configChanges="orientation|keyboardHidden|screenSize"
+                android:label="@string/title_activity_login"
+                android:theme="@style/FullscreenTheme">
+        </activity>
+        <activity
+                android:name=".PreLoginActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:label="@string/app_name"
                 android:theme="@style/FullscreenTheme">
@@ -20,7 +32,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <meta-data android:name="preloaded_fonts" android:resource="@array/preloaded_fonts"/>
+
+        <meta-data
+                android:name="preloaded_fonts"
+                android:resource="@array/preloaded_fonts"/>
     </application>
 
 </manifest>
