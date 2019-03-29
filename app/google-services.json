@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "333295851465",
+    "firebase_url": "https://password-manager-afa47.firebaseio.com",
+    "project_id": "password-manager-afa47",
+    "storage_bucket": "password-manager-afa47.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:333295851465:android:32711ff0cc501cf4",
+        "android_client_info": {
+          "package_name": "com.tombleroneee.passwordmanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "333295851465-dftbioobcb75i388frit5dff4sv5dqjm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tombleroneee.passwordmanager",
+            "certificate_hash": "dba0ab87e1d822ec1219dc5a9be58fd5b09dddd3"
+          }
+        },
+        {
+          "client_id": "333295851465-quk6apgl2gh2d2mjiupn42hi2e46vb45.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLt0259uAu0uFqFJGKzodBnJQwPY71kD8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "333295851465-quk6apgl2gh2d2mjiupn42hi2e46vb45.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
