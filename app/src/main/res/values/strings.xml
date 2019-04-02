@@ -1,13 +1,17 @@
 <resources>
     <string name="app_name">Password Manager</string>
 
-    // Login
+    // Pre Login Activity
     <string name="login_button">Login</string>
     <string name="register_button">Register</string>
 
-    // Titles
+    // Activity Titles
     <string name="register_title">Register</string>
     <string name="login_title">Login</string>
+
+    // Login Activity
+    <string name="email_hint">Enter Email</string>
+    <string name="password_hint">Enter Password</string>
 
     <string name="title_activity_login">LoginActivity</string>
     <string name="dummy_button">Dummy Button</string>
