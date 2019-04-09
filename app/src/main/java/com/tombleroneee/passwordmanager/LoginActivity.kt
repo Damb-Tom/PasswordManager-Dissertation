@@ -2,6 +2,7 @@ package com.tombleroneee.passwordmanager
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Patterns
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -17,7 +18,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun validateEmail(): Boolean {
-
         user = auth.currentUser!!
         var emailVerified = user.isEmailVerified
         if (emailVerified) {
@@ -65,6 +65,10 @@ class LoginActivity : AppCompatActivity() {
 
             if (email.isEmpty() || password.isEmpty()) {
                 createToast("Please enter an Email and Password!", Toast.LENGTH_SHORT)
+                return@setOnClickListener
+            }
+            if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                createToast("Invalid Email Address!", Toast.LENGTH_SHORT)
                 return@setOnClickListener
             }
 
