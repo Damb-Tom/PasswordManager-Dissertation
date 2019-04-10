@@ -9,9 +9,11 @@
     <string name="register_title">Register</string>
     <string name="login_title">Login</string>
 
-    // Login Activity
+    // Login Activity and Reg
     <string name="email_hint">Enter Email</string>
-    <string name="password_hint">Enter Password</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="password_hint1">Enter Password</string>
+    <string name="password_hint2">Confirm Password</string>
 
     <string name="title_activity_login">LoginActivity</string>
     <string name="dummy_button">Dummy Button</string>

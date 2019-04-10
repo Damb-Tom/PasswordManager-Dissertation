@@ -12,7 +12,7 @@ class PreLoginActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_pre_login)
 
-        login_button.setOnClickListener {
+        loginButton.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
         }
 

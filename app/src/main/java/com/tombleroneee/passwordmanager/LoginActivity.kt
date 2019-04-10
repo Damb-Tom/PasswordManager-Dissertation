@@ -59,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
                 }
         }
 
-        login_button.setOnClickListener {
+        loginButton.setOnClickListener {
             var email = emailField.text.toString()
             val password = passwordField.text.toString()
 
