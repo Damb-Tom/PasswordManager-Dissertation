@@ -66,7 +66,7 @@
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
                 android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/forgotPasswordText"
-                app:layout_constraintVertical_bias="0.0"/>
+                app:layout_constraintVertical_bias="0.0" android:textColor="@android:color/white"/>
     </android.support.constraint.ConstraintLayout>
 
     <!-- This FrameLayout insets its children based on system windows using
