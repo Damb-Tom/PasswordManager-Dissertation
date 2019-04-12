@@ -8,6 +8,7 @@
     // Activity Titles
     <string name="register_title">Register</string>
     <string name="login_title">Login</string>
+    <string name="main_title">Welcome Back!</string>
 
     // Login Activity and Reg
     <string name="email_hint">Enter Email</string>
@@ -20,4 +21,7 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
     <string name="title_activity_register">RegisterActivity</string>
+    <string name="enter_display_name">Enter Name</string>
+
+    <string name="null_data">NULL</string>
 </resources>
