@@ -24,4 +24,5 @@
     <string name="enter_display_name">Enter Name</string>
 
     <string name="null_data">NULL</string>
+    <string name="stay_logged_in">Stay Logged In?</string>
 </resources>
