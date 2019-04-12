@@ -16,8 +16,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var user: FirebaseUser
     private var stayLoggedIn: Boolean = false
 
-    private fun createToast(text: String, stayLength: Int) {
-        Toast.makeText(baseContext, text, stayLength).show()
+    private fun createToast(text: String, stayTime: Int) {
+        Toast.makeText(baseContext, text, stayTime).show()
     }
 
     private fun attemptLogin(email: String, password: String){

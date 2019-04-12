@@ -15,8 +15,8 @@ class RegisterActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
 
-    private fun createToast(text: String, stayLength: Int) {
-        Toast.makeText(baseContext, text, stayLength).show()
+    private fun createToast(text: String, stayTime: Int) {
+        Toast.makeText(baseContext, text, stayTime).show()
     }
 
     private fun updateDisplayName(name: String){
