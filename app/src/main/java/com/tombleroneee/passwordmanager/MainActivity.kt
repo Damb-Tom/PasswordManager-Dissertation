@@ -1,12 +1,15 @@
 package com.tombleroneee.passwordmanager
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.text.InputType
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -28,7 +31,10 @@ class MainActivity : AppCompatActivity() {
 
         val user = FirebaseAuth.getInstance().currentUser
         val userID = user!!.uid
-        // TODO: Go to login page if not logged in
+        if(user == null){
+            val intent = Intent(this, PreLoginActivity::class.java)
+            startActivity(intent)
+        }
 
         database = FirebaseDatabase.getInstance().reference
 
@@ -98,6 +104,30 @@ class MainActivity : AppCompatActivity() {
 
             addNewPassDialog.show()
         }
+    }
 
+    private var backPressedTwice = false
+    override fun onBackPressed() {
+        if (backPressedTwice) {
+            val signOutDialogBox = AlertDialog.Builder(this)
+            signOutDialogBox.setTitle("Sign Out?")
+            signOutDialogBox.setMessage("Would you like to sign out?")
+
+            signOutDialogBox.setPositiveButton("Yes") { dialog, _ ->
+                dialog.dismiss()
+
+                Toast.makeText(baseContext, "Signed out successfully!", Toast.LENGTH_SHORT).show()
+                FirebaseAuth.getInstance().signOut()
+                startActivity(Intent(this@MainActivity, PreLoginActivity::class.java))
+            }
+
+            signOutDialogBox.setNeutralButton("No") {
+                    dialog, _ -> dialog.cancel()
+            }
+            signOutDialogBox.show()
+            return
+        }
+        this.backPressedTwice = true
+        Handler().postDelayed({ this.backPressedTwice = false }, 2000)
     }
 }
