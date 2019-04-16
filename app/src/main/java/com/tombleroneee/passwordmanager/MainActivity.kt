@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     private var recyclerListList = ArrayList<RecyclerData>()
     private var dialogControls = ArrayList<EditText>()
 
-    private fun updateRecyclerView(){
+    private fun updateRecyclerView() {
         recyclerList.layoutManager = LinearLayoutManager(this@MainActivity, LinearLayout.VERTICAL, false)
         recyclerList.adapter = RecyclerClass(recyclerListList)
     }
@@ -31,9 +31,14 @@ class MainActivity : AppCompatActivity() {
 
         val user = FirebaseAuth.getInstance().currentUser
         val userID = user!!.uid
-        if(user == null){
-            val intent = Intent(this, PreLoginActivity::class.java)
-            startActivity(intent)
+
+        // Listen for auth change
+        FirebaseAuth.AuthStateListener { auth ->
+            val user = auth.currentUser
+            if (user != null) {
+                val intent = Intent(this, PreLoginActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         database = FirebaseDatabase.getInstance().reference
@@ -44,13 +49,18 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-
                     // Clear Arrays because they'll have kept data from the previous 'onDataChange'
                     recyclerListList.clear()
 
                     // Grab Data unsorted
                     for (ds in dataSnapshot.children) {
-                        recyclerListList.add(RecyclerData(ds.child("title").value.toString(), ds.child("username").value.toString(), ds.child("password").value.toString()))
+                        recyclerListList.add(
+                            RecyclerData(
+                                ds.child("title").value.toString(),
+                                ds.child("username").value.toString(),
+                                ds.child("password").value.toString()
+                            )
+                        )
                     }
                     updateRecyclerView()
                 }
@@ -58,12 +68,11 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        btnAddNew.setOnClickListener {
+        btnAddNew2.setOnClickListener {
             val layout = LinearLayout(this)
             layout.orientation = LinearLayout.VERTICAL
+            dialogControls.clear()
 
-            val addNewPassDialog = AlertDialog.Builder(this)
-            addNewPassDialog.setTitle("Create Memo")
 
             EditText(this).apply {
                 hint = "Website"
@@ -87,44 +96,53 @@ class MainActivity : AppCompatActivity() {
                 dialogControls.add(this)
             }
 
+            AlertDialog.Builder(this).apply {
+                setTitle("Add Password")
+                setView(layout)
 
-            addNewPassDialog.setView(layout)
-            addNewPassDialog.setPositiveButton("Add") { dialog, _ ->
-                dialog.dismiss()
+                setPositiveButton("Add") { dialog, _ ->
+                    dialog.dismiss()
 
-                val data = RecyclerData(dialogControls[0].text.toString(), dialogControls[1].text.toString(), dialogControls[2].text.toString())
-                if(data.title.isNotEmpty() && data.username.isNotEmpty() && data.Password.isNotEmpty()) {
-                    database.child("stored_passwords").child(userID).push().setValue(data)
+                    val data = RecyclerData(
+                        dialogControls[0].text.toString(),
+                        dialogControls[1].text.toString(),
+                        dialogControls[2].text.toString()
+                    )
+                    if (data.title.isNotEmpty() && data.username.isNotEmpty() && data.Password.isNotEmpty()) {
+                        database.child("stored_passwords").child(userID).push().setValue(data)
+                    }
                 }
-            }
 
-            addNewPassDialog.setNeutralButton("Cancel") {
-                    dialog, _ -> dialog.cancel()
-            }
+                setNeutralButton("Cancel") { dialog, _ ->
+                    dialog.cancel()
+                }
 
-            addNewPassDialog.show()
+                show()
+            }
         }
     }
 
     private var backPressedTwice = false
     override fun onBackPressed() {
         if (backPressedTwice) {
-            val signOutDialogBox = AlertDialog.Builder(this)
-            signOutDialogBox.setTitle("Sign Out?")
-            signOutDialogBox.setMessage("Would you like to sign out?")
+            AlertDialog.Builder(this).apply {
+                setTitle("Sign Out?")
+                setMessage("Would you like to sign out?")
 
-            signOutDialogBox.setPositiveButton("Yes") { dialog, _ ->
-                dialog.dismiss()
+                setPositiveButton("Yes") { dialog, _ ->
+                    dialog.dismiss()
 
-                Toast.makeText(baseContext, "Signed out successfully!", Toast.LENGTH_SHORT).show()
-                FirebaseAuth.getInstance().signOut()
-                startActivity(Intent(this@MainActivity, PreLoginActivity::class.java))
+                    Toast.makeText(baseContext, "Signed out successfully!", Toast.LENGTH_SHORT).show()
+                    FirebaseAuth.getInstance().signOut()
+                    startActivity(Intent(this@MainActivity, PreLoginActivity::class.java))
+                }
+
+                setNeutralButton("No") { dialog, _ ->
+                    dialog.cancel()
+                }
+
+                show()
             }
-
-            signOutDialogBox.setNeutralButton("No") {
-                    dialog, _ -> dialog.cancel()
-            }
-            signOutDialogBox.show()
             return
         }
         this.backPressedTwice = true

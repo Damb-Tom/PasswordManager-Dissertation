@@ -1,14 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:background="@color/colorGrey2"
-             tools:context=".MainActivity">
+             tools:context=".MainActivityTabbed$PlaceholderFragment">
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
+<!-- The primary full-screen view. This can be replaced with whatever view
+     is needed to present your content, e.g. VideoView, SurfaceView,
+     TextureView, etc. -->
     <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -19,22 +18,32 @@
                   android:textColor="@android:color/white"
                   android:textSize="50sp"
                   android:gravity="center"
-                  android:text="@string/main_title" android:textAlignment="center"
+                  android:text="@string/main_title_2" android:textAlignment="center"
                   android:fontFamily="@font/montserrat_bold" android:textStyle="bold"
                   app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
                   app:layout_constraintTop_toTopOf="parent"/>
-        <android.support.v7.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:id="@+id/recyclerList"
+        <TextView
+                android:text="@string/password_strength"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/txtStrength"
+                android:layout_marginTop="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/fullscreen_content"
-                app:layout_constraintVertical_bias="0.050000012" tools:listitem="@layout/list_layout"/>
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp" android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.060000002"
+                android:textColor="@android:color/white" android:textAlignment="center" android:textSize="18sp"/>
+        <SeekBar
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" android:id="@+id/strengthSeekBar"
+                android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="8dp"
+                android:progressDrawable="@drawable/seekbar_style"
+                android:thumb="@drawable/seekbar_style_thumb"
+                app:layout_constraintTop_toBottomOf="@+id/txtStrength" app:layout_constraintVertical_bias="0.0"
+                android:layout_marginTop="8dp"/>
     </android.support.constraint.ConstraintLayout>
-
-    <!-- This FrameLayout insets its children based on system windows using
-         android:fitsSystemWindows. -->
     <FrameLayout android:layout_width="match_parent"
                  android:layout_height="match_parent"
                  android:fitsSystemWindows="false" app:layout_constraintStart_toStartOf="parent"
@@ -57,5 +66,8 @@
                     android:id="@+id/btnAddNew2" app:fabSize="normal"/>
         </LinearLayout>
     </FrameLayout>
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
 
 </FrameLayout>
