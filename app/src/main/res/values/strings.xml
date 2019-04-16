@@ -8,7 +8,8 @@
     // Activity Titles
     <string name="register_title">Register</string>
     <string name="login_title">Login</string>
-    <string name="main_title">Welcome Back!</string>
+    <string name="main_title">Saved Passwords!</string>
+    <string name="main_title_2">Password Generator!</string>
 
     // Login Activity and Reg
     <string name="email_hint">Enter Email</string>
@@ -25,4 +26,8 @@
 
     <string name="null_data">NULL</string>
     <string name="stay_logged_in">Stay Logged In?</string>
+    <string name="title_activity_main_tabbed">MainActivityTabbed</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="password_strength">Password Strength:</string>
 </resources>
