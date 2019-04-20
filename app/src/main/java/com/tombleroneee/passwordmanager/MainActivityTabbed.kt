@@ -1,30 +1,30 @@
 package com.tombleroneee.passwordmanager
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_main_tabbed.*
+import kotlinx.android.synthetic.main.fragment_main_activity_tabbed.*
 import kotlinx.android.synthetic.main.fragment_main_activity_tabbed.view.*
 import kotlinx.android.synthetic.main.fragment_main_activity_tabbed_2.view.*
-import android.support.v7.app.AlertDialog
-import android.text.InputType
-import android.widget.EditText
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.util.Log
-import kotlinx.android.synthetic.main.fragment_main_activity_tabbed_3.*
 import kotlinx.android.synthetic.main.fragment_main_activity_tabbed_3.view.*
 
 
@@ -68,6 +68,7 @@ class MainActivityTabbed : AppCompatActivity() {
             if (arguments?.getInt(ARG_SECTION_NUMBER) == 1) {
                 rootView.recyclerList.layoutManager = LinearLayoutManager(this.context, LinearLayout.VERTICAL, false)
                 rootView.recyclerList.adapter = RecyclerClass(recyclerListList)
+                loadingBar.visibility = View.INVISIBLE
             }
         }
 
@@ -108,7 +109,7 @@ class MainActivityTabbed : AppCompatActivity() {
             // TODO: ADDITIONS - Done
 
             // Characters
-            var testChars = +(passwordLength * 4)
+            val testChars = +(passwordLength * 4)
             Log.d("TEST", "Chars: $testChars")
 
             var lengthChars = 0
@@ -142,26 +143,26 @@ class MainActivityTabbed : AppCompatActivity() {
 
             // Upper Case
             if (upperCaseNumber != 0) {
-                var testUpper = ((passwordLength - upperCaseNumber) * 2)
+                val testUpper = ((passwordLength - upperCaseNumber) * 2)
                 Log.d("TEST", "Upper: $testUpper")
             }
 
             // Lower Case
             if (lowerCaseNumber != 0) {
-                var testLower = ((passwordLength - lowerCaseNumber) * 2)
+                val testLower = ((passwordLength - lowerCaseNumber) * 2)
                 Log.d("TEST", "Lower: $testLower")
             }
 
             // Numbers
-            var testNumbers = (numbers * 4)
+            val testNumbers = (numbers * 4)
             Log.d("TEST", "Numbers: $testNumbers")
 
             // Symbols
-            var testSymbols = (symbols * 6)
+            val testSymbols = (symbols * 6)
             Log.d("TEST", "Symbols: $testSymbols")
 
             // Middle Numbers or Symbols
-            var testNumbersOrSymbols = (middleNumbersOrSymbols * 2)
+            val testNumbersOrSymbols = (middleNumbersOrSymbols * 2)
             Log.d("TEST", "Middle Numbers or Symbols: $testNumbersOrSymbols")
 
             // Minimum Requirements
@@ -181,17 +182,17 @@ class MainActivityTabbed : AppCompatActivity() {
                 minRequirements++
 
             if (lengthReached && minRequirements >= 3) {
-                var testRequirements = ((minRequirements + 1) * 2) // 1 = lengthReached
+                val testRequirements = ((minRequirements + 1) * 2) // 1 = lengthReached
                 Log.d("TEST", "Requirements: $testRequirements")
             }
 
             // TODO: DEDUCTIONS
             // Letters
-            var testDeductionLetters = (lengthChars)
+            val testDeductionLetters = (lengthChars)
             Log.d("TEST", "Letters: $testDeductionLetters")
 
             // Numbers
-            var testDeductionNumbers = (numbers)
+            val testDeductionNumbers = (numbers)
             Log.d("TEST", "Letters: $testDeductionNumbers")
 
             return 0
@@ -298,7 +299,7 @@ class MainActivityTabbed : AppCompatActivity() {
                     rootView = inflater.inflate(R.layout.fragment_main_activity_tabbed_2, container, false)
                     rootView.btnGenerate.setOnClickListener {
                         if (rootView.chkLetters.isChecked || rootView.chkSymbols.isChecked || rootView.chkNumbers.isChecked) {
-                            var pass = generatePassword(
+                            val pass = generatePassword(
                                 rootView.strengthSeekBar.progress,
                                 rootView.chkLetters.isChecked,
                                 rootView.chkSymbols.isChecked,
@@ -310,8 +311,8 @@ class MainActivityTabbed : AppCompatActivity() {
                         }
                     }
                     rootView.btnCopy.setOnClickListener {
-                        var clipboardManager = this.context!!.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
-                        var textToCopy = ClipData.newPlainText("text", rootView.txtGeneratedPass.text)
+                        val clipboardManager = this.context!!.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
+                        val textToCopy = ClipData.newPlainText("text", rootView.txtGeneratedPass.text)
                         clipboardManager?.primaryClip = textToCopy
                         Toast.makeText(context, "Copied password to clipboard!", Toast.LENGTH_SHORT).show()
                     }
