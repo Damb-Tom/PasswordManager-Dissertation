@@ -21,7 +21,7 @@ class PreLoginActivity : AppCompatActivity() {
         stayLoggedIn = settings.getBoolean("stayLoggedIn", false)
 
         if(auth.currentUser != null && stayLoggedIn){
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, MainActivityTabbed::class.java)
             startActivity(intent)
         }
 

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,11 @@ import kotlinx.android.synthetic.main.fragment_main_activity_tabbed_2.view.*
 import android.support.v7.app.AlertDialog
 import android.text.InputType
 import android.widget.EditText
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.util.Log
+import kotlinx.android.synthetic.main.fragment_main_activity_tabbed_3.*
+import kotlinx.android.synthetic.main.fragment_main_activity_tabbed_3.view.*
 
 
 class MainActivityTabbed : AppCompatActivity() {
@@ -49,13 +55,12 @@ class MainActivityTabbed : AppCompatActivity() {
         }
 
         override fun getCount(): Int {
-            return 2
+            return 3
         }
     }
 
     class PlaceholderFragment : Fragment() {
         private lateinit var database: DatabaseReference
-        private var recyclerListList = ArrayList<RecyclerData>()
         lateinit var rootView: View
         private var dialogControls = ArrayList<EditText>()
 
@@ -66,98 +71,321 @@ class MainActivityTabbed : AppCompatActivity() {
             }
         }
 
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            if (arguments?.getInt(ARG_SECTION_NUMBER) == 1) {
-                rootView = inflater.inflate(R.layout.fragment_main_activity_tabbed, container, false)
+        private fun generatePassword(length: Int, letters: Boolean, symbols: Boolean, numbers: Boolean): String {
+            var generatedPasswordChars = ""
+            val usableLetters = "abcdefghijklmnopqrstuvwxyz"
+            val usableSymbols = "!@£$%^&*()"
+            val usableNumbers = "1234567890"
 
-                val user = FirebaseAuth.getInstance().currentUser
-                val userID = user!!.uid
+            if (letters)
+                generatedPasswordChars += usableLetters
+            if (letters)
+                generatedPasswordChars += usableLetters.toUpperCase()
+            if (symbols)
+                generatedPasswordChars += usableSymbols
+            if (numbers)
+                generatedPasswordChars += usableNumbers
 
-                database = FirebaseDatabase.getInstance().reference
+            var generatedPassword = ""
+            for (i in 0..length) {
+                val randomChar = (0 until generatedPasswordChars.length).random()
+                generatedPassword += generatedPasswordChars[randomChar]
+            }
+            return generatedPassword
+        }
 
-                database.child("stored_passwords").child(userID).orderByKey()
-                    .addValueEventListener(object : ValueEventListener {
-                        override fun onCancelled(p0: DatabaseError) {
-                        }
+        fun Int.length() = when (this) {
+            0 -> 1
+            else -> Math.log10(Math.abs(toDouble())).toInt() + 1
+        }
 
-                        override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            recyclerListList.clear()
-
-                            for (ds in dataSnapshot.children) {
-                                recyclerListList.add(
-                                    RecyclerData(
-                                        ds.child("title").value.toString(),
-                                        ds.child("username").value.toString(),
-                                        ds.child("password").value.toString()
-                                    )
-                                )
-                            }
-                            updateRecyclerView()
-                        }
-                    })
-
-
-                rootView.btnAddNew1.setOnClickListener {
-                    Toast.makeText(context, "Test 1", Toast.LENGTH_SHORT).show()
-
-
-                    val layout = LinearLayout(context)
-                    layout.orientation = LinearLayout.VERTICAL
-                    dialogControls.clear()
+        private fun testPassword(password: String): Int {
+            val passwordLength = password.length
+            Log.d("TEST", "Pass: $password")
+            Log.d("TEST", "Len: $passwordLength")
 
 
-                    EditText(context).apply {
-                        hint = "Website"
-                        inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-                        textAlignment = EditText.TEXT_ALIGNMENT_CENTER
-                        layout.addView(this)
-                        dialogControls.add(this)
-                    }
-                    EditText(context).apply {
-                        hint = "Username/Email"
-                        inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-                        textAlignment = EditText.TEXT_ALIGNMENT_CENTER
-                        layout.addView(this)
-                        dialogControls.add(this)
-                    }
-                    EditText(context).apply {
-                        hint = "Password"
-                        inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                        textAlignment = EditText.TEXT_ALIGNMENT_CENTER
-                        layout.addView(this)
-                        dialogControls.add(this)
-                    }
+            // TODO: ADDITIONS - Done
 
-                    AlertDialog.Builder(it.context).apply {
-                        setTitle("Add Password")
-                        setView(layout)
+            // Characters
+            var testChars = +(passwordLength * 4)
+            Log.d("TEST", "Chars: $testChars")
 
-                        setPositiveButton("Add") { dialog, _ ->
-                            dialog.dismiss()
+            var lengthChars = 0
+            var lowerCaseNumber = 0
+            var upperCaseNumber = 0
+            var numbers = 0
+            var symbols = 0
+            var middleNumbersOrSymbols = 0
 
-                            val data = RecyclerData(
-                                dialogControls[0].text.toString(),
-                                dialogControls[1].text.toString(),
-                                dialogControls[2].text.toString()
-                            )
-                            if (data.title.isNotEmpty() && data.username.isNotEmpty() && data.Password.isNotEmpty()) {
-                                database.child("stored_passwords").child(userID).push().setValue(data)
-                            }
-                        }
-
-                        setNeutralButton("Cancel") { dialog, _ ->
-                            dialog.cancel()
-                        }
-
-                        show()
-                    }
-
-
+            for (i in 0 until passwordLength) {
+                if (password[i].isLowerCase()) {
+                    lowerCaseNumber++
                 }
-            } else {
-                rootView = inflater.inflate(R.layout.fragment_main_activity_tabbed_2, container, false)
-                rootView.btnAddNew2.setOnClickListener {
-                    Toast.makeText(context, "Test 2", Toast.LENGTH_SHORT).show()
+                if (password[i].isUpperCase()) {
+                    upperCaseNumber++
+                }
+                if (password[i].isLetter()) {
+                    lengthChars++
+                }
+                if (password[i].isDigit()) {
+                    numbers++
+                }
+                if (!password[i].isLetter() && !password[i].isDigit()) {
+                    symbols++
+                }
+                if (!password[i].isLetter()) {
+                    if (i != 0 && i != passwordLength - 1)
+                        middleNumbersOrSymbols++
+                }
+            }
+
+            // Upper Case
+            if (upperCaseNumber != 0) {
+                var testUpper = ((passwordLength - upperCaseNumber) * 2)
+                Log.d("TEST", "Upper: $testUpper")
+            }
+
+            // Lower Case
+            if (lowerCaseNumber != 0) {
+                var testLower = ((passwordLength - lowerCaseNumber) * 2)
+                Log.d("TEST", "Lower: $testLower")
+            }
+
+            // Numbers
+            var testNumbers = (numbers * 4)
+            Log.d("TEST", "Numbers: $testNumbers")
+
+            // Symbols
+            var testSymbols = (symbols * 6)
+            Log.d("TEST", "Symbols: $testSymbols")
+
+            // Middle Numbers or Symbols
+            var testNumbersOrSymbols = (middleNumbersOrSymbols * 2)
+            Log.d("TEST", "Middle Numbers or Symbols: $testNumbersOrSymbols")
+
+            // Minimum Requirements
+            var lengthReached = false
+            var minRequirements = 0
+
+            if (passwordLength >= 8)
+                lengthReached = true
+
+            if (upperCaseNumber > 0)
+                minRequirements++
+            if (lowerCaseNumber > 0)
+                minRequirements++
+            if (numbers > 0)
+                minRequirements++
+            if (symbols > 0)
+                minRequirements++
+
+            if (lengthReached && minRequirements >= 3) {
+                var testRequirements = ((minRequirements + 1) * 2) // 1 = lengthReached
+                Log.d("TEST", "Requirements: $testRequirements")
+            }
+
+            // TODO: DEDUCTIONS
+            // Letters
+            var testDeductionLetters = (lengthChars)
+            Log.d("TEST", "Letters: $testDeductionLetters")
+
+            // Numbers
+            var testDeductionNumbers = (numbers)
+            Log.d("TEST", "Letters: $testDeductionNumbers")
+
+            return 0
+        }
+
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+            when {
+                arguments?.getInt(ARG_SECTION_NUMBER) == 1 -> {
+                    rootView = inflater.inflate(R.layout.fragment_main_activity_tabbed, container, false)
+
+                    val user = FirebaseAuth.getInstance().currentUser
+                    val userID = user!!.uid
+
+                    database = FirebaseDatabase.getInstance().reference
+
+                    database.child("stored_passwords").child(userID).orderByKey()
+                        .addValueEventListener(object : ValueEventListener {
+                            override fun onCancelled(p0: DatabaseError) {
+                            }
+
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                recyclerListList.clear()
+
+                                for (ds in dataSnapshot.children) {
+                                    recyclerListList.add(
+                                        RecyclerData(
+                                            ds.child("title").value.toString(),
+                                            ds.child("username").value.toString(),
+                                            ds.child("password").value.toString(),
+                                            ds.child("title").ref,
+                                            ds.child("username").ref,
+                                            ds.child("password").ref
+                                        )
+                                    )
+                                }
+                                updateRecyclerView()
+                            }
+                        })
+
+
+                    rootView.btnCreateSavedPassword.setOnClickListener {
+                        val layout = LinearLayout(context)
+                        layout.orientation = LinearLayout.VERTICAL
+                        dialogControls.clear()
+
+
+                        EditText(context).apply {
+                            hint = "Website"
+                            setTextColor(ContextCompat.getColor(context, R.color.White))
+                            setHintTextColor(ContextCompat.getColor(context, R.color.lightWhite))
+                            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+                            textAlignment = EditText.TEXT_ALIGNMENT_CENTER
+                            layout.addView(this)
+                            dialogControls.add(this)
+                        }
+                        EditText(context).apply {
+                            hint = "Username/Email"
+                            setTextColor(ContextCompat.getColor(context, R.color.White))
+                            setHintTextColor(ContextCompat.getColor(context, R.color.lightWhite))
+                            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+                            textAlignment = EditText.TEXT_ALIGNMENT_CENTER
+                            layout.addView(this)
+                            dialogControls.add(this)
+                        }
+                        EditText(context).apply {
+                            hint = "Password"
+                            setTextColor(ContextCompat.getColor(context, R.color.White))
+                            setHintTextColor(ContextCompat.getColor(context, R.color.lightWhite))
+                            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                            textAlignment = EditText.TEXT_ALIGNMENT_CENTER
+                            layout.addView(this)
+                            dialogControls.add(this)
+                        }
+
+                        AlertDialog.Builder(it.context, R.style.MyAlertDialogStyle).apply {
+                            setTitle("Store Password")
+                            setView(layout)
+
+                            setPositiveButton("Add") { dialog, _ ->
+                                dialog.dismiss()
+
+                                val data = RecyclerDataWithoutRef(
+                                    dialogControls[0].text.toString(),
+                                    dialogControls[1].text.toString(),
+                                    dialogControls[2].text.toString()
+                                )
+                                if (data.title.isNotEmpty() && data.username.isNotEmpty() && data.Password.isNotEmpty()) {
+                                    database.child("stored_passwords").child(userID).push().setValue(data)
+                                    Toast.makeText(context, "Stored Password!", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+
+                            setNeutralButton("Cancel") { dialog, _ ->
+                                dialog.cancel()
+                            }
+
+                            show()
+                        }
+
+
+                    }
+                }
+                arguments?.getInt(ARG_SECTION_NUMBER) == 2 -> {
+                    rootView = inflater.inflate(R.layout.fragment_main_activity_tabbed_2, container, false)
+                    rootView.btnGenerate.setOnClickListener {
+                        if (rootView.chkLetters.isChecked || rootView.chkSymbols.isChecked || rootView.chkNumbers.isChecked) {
+                            var pass = generatePassword(
+                                rootView.strengthSeekBar.progress,
+                                rootView.chkLetters.isChecked,
+                                rootView.chkSymbols.isChecked,
+                                rootView.chkNumbers.isChecked
+                            )
+                            rootView.txtGeneratedPass.setText(pass)
+                        } else {
+                            Toast.makeText(context, "Please select password properties!", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    rootView.btnCopy.setOnClickListener {
+                        var clipboardManager = this.context!!.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
+                        var textToCopy = ClipData.newPlainText("text", rootView.txtGeneratedPass.text)
+                        clipboardManager?.primaryClip = textToCopy
+                        Toast.makeText(context, "Copied password to clipboard!", Toast.LENGTH_SHORT).show()
+                    }
+                    rootView.btnSave.setOnClickListener {
+                        val user = FirebaseAuth.getInstance().currentUser
+                        val userID = user!!.uid
+                        val pass = "${rootView.txtGeneratedPass.text}"
+
+                        val layout = LinearLayout(context)
+                        layout.orientation = LinearLayout.VERTICAL
+                        dialogControls.clear()
+
+                        EditText(context).apply {
+                            hint = "Website"
+                            setTextColor(ContextCompat.getColor(context, R.color.White))
+                            setHintTextColor(ContextCompat.getColor(context, R.color.lightWhite))
+                            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+                            textAlignment = EditText.TEXT_ALIGNMENT_CENTER
+                            layout.addView(this)
+                            dialogControls.add(this)
+                        }
+                        EditText(context).apply {
+                            hint = "Username/Email"
+                            setTextColor(ContextCompat.getColor(context, R.color.White))
+                            setHintTextColor(ContextCompat.getColor(context, R.color.lightWhite))
+                            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+                            textAlignment = EditText.TEXT_ALIGNMENT_CENTER
+                            layout.addView(this)
+                            dialogControls.add(this)
+                        }
+                        EditText(context).apply {
+                            hint = "Password"
+                            setText(pass)
+                            setTextColor(ContextCompat.getColor(context, R.color.White))
+                            setHintTextColor(ContextCompat.getColor(context, R.color.lightWhite))
+                            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                            textAlignment = EditText.TEXT_ALIGNMENT_CENTER
+                            layout.addView(this)
+                            dialogControls.add(this)
+                        }
+
+                        AlertDialog.Builder(it.context, R.style.MyAlertDialogStyle).apply {
+                            setTitle("Store Password")
+                            setView(layout)
+
+                            setPositiveButton("Add") { dialog, _ ->
+                                dialog.dismiss()
+
+                                val data = RecyclerDataWithoutRef(
+                                    dialogControls[0].text.toString(),
+                                    dialogControls[1].text.toString(),
+                                    dialogControls[2].text.toString()
+                                )
+                                if (data.title.isNotEmpty() && data.username.isNotEmpty() && data.Password.isNotEmpty()) {
+                                    database = FirebaseDatabase.getInstance().reference
+                                    database.child("stored_passwords").child(userID).push().setValue(data)
+                                    Toast.makeText(context, "Stored Password!", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                            setNeutralButton("Cancel") { dialog, _ ->
+                                dialog.cancel()
+                            }
+
+                            show()
+                        }
+                    }
+                }
+                arguments?.getInt(ARG_SECTION_NUMBER) == 3 -> {
+                    rootView = inflater.inflate(R.layout.fragment_main_activity_tabbed_3, container, false)
+
+                    rootView.btnCheck.setOnClickListener {
+                        val result = testPassword(rootView.txtPassInput.text.toString())
+                        Toast.makeText(context, "$result%", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
             return rootView
