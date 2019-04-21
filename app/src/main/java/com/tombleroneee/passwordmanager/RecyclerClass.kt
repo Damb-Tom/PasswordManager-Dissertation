@@ -2,12 +2,16 @@ package com.tombleroneee.passwordmanager
 
 import android.content.Context
 import android.content.Intent
+import android.support.v4.content.ContextCompat
 import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.LinearLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -47,9 +51,11 @@ class RecyclerClass(private val recyclerList: ArrayList<RecyclerData>, val conte
         val mainTitle = itemView.text!!
         private lateinit var database: DatabaseReference
         private lateinit var userId: String
+        private var dialogControls = ArrayList<EditText>()
 
         init {
             val user = FirebaseAuth.getInstance().currentUser
+            userId = user!!.uid
             if (user != null) {
                 userId = user.uid
                 database = FirebaseDatabase.getInstance().reference.child("stored_passwords").child(userId)
@@ -69,6 +75,71 @@ class RecyclerClass(private val recyclerList: ArrayList<RecyclerData>, val conte
                     recyclerListList[v!!.tag.toString().toInt()].urlRef.setValue(null)
                     recyclerListList[v.tag.toString().toInt()].usernameRef.setValue(null)
                     recyclerListList[v.tag.toString().toInt()].passwordRef.setValue(null)
+                }
+
+                setNegativeButton("Edit") { dialog, _ ->
+                    dialog.dismiss()
+                    val layout = LinearLayout(context)
+                    layout.orientation = LinearLayout.VERTICAL
+                    dialogControls.clear()
+
+
+                    EditText(context).apply {
+                        setText(recyclerListList[v!!.tag.toString().toInt()].title)
+                        hint = "Website"
+                        setTextColor(ContextCompat.getColor(context, R.color.White))
+                        setHintTextColor(ContextCompat.getColor(context, R.color.lightWhite))
+                        inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+                        textAlignment = EditText.TEXT_ALIGNMENT_CENTER
+                        layout.addView(this)
+                        dialogControls.add(this)
+                    }
+                    EditText(context).apply {
+                        setText(recyclerListList[v!!.tag.toString().toInt()].username)
+                        hint = "Username/Email"
+                        setTextColor(ContextCompat.getColor(context, R.color.White))
+                        setHintTextColor(ContextCompat.getColor(context, R.color.lightWhite))
+                        inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+                        textAlignment = EditText.TEXT_ALIGNMENT_CENTER
+                        layout.addView(this)
+                        dialogControls.add(this)
+                    }
+                    EditText(context).apply {
+                        setText(recyclerListList[v!!.tag.toString().toInt()].password)
+                        hint = "Password"
+                        setTextColor(ContextCompat.getColor(context, R.color.White))
+                        setHintTextColor(ContextCompat.getColor(context, R.color.lightWhite))
+                        inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                        textAlignment = EditText.TEXT_ALIGNMENT_CENTER
+                        layout.addView(this)
+                        dialogControls.add(this)
+                    }
+
+                    AlertDialog.Builder(context, R.style.MyAlertDialogStyle).apply {
+                        setTitle("Edit Password")
+                        setView(layout)
+
+                        setPositiveButton("Save") { dialog, _ ->
+                            dialog.dismiss()
+
+                            val data = RecyclerDataWithoutRef(
+                                dialogControls[0].text.toString(),
+                                dialogControls[1].text.toString(),
+                                dialogControls[2].text.toString()
+                            )
+                            if (data.title.isNotEmpty() && data.username.isNotEmpty() && data.password.isNotEmpty()) {
+                                recyclerListList[v!!.tag.toString().toInt()].urlRef.setValue(data.title)
+                                recyclerListList[v.tag.toString().toInt()].usernameRef.setValue(data.username)
+                                recyclerListList[v.tag.toString().toInt()].passwordRef.setValue(data.password)
+                            }
+                        }
+
+                        setNeutralButton("Cancel") { dialog, _ ->
+                            dialog.cancel()
+                        }
+
+                        show()
+                    }
                 }
 
                 setNeutralButton("Nothing") { dialog, _ ->
