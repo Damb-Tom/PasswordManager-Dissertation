@@ -23,7 +23,7 @@
             android:layout_height="match_parent">
 
         <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
                 android:ems="10"
@@ -36,7 +36,7 @@
                 android:textColor="@android:color/white" android:textAlignment="center"
                 android:autofillHints="name"/>
         <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:ems="10"
@@ -51,7 +51,7 @@
                 android:textColorHint="@android:color/white" android:autofillHints="email"
                 app:layout_constraintTop_toBottomOf="@+id/displayNameInput"/>
         <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:ems="10"
@@ -65,7 +65,7 @@
                 android:textSize="18sp" android:textColor="@android:color/white" android:textAlignment="center"
                 android:textColorHint="@android:color/white" android:autofillHints="password"/>
         <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:ems="10"
@@ -93,17 +93,13 @@
                       android:layout_gravity="bottom|center_horizontal"
                       android:orientation="horizontal"
                       tools:ignore="UselessParent">
-            <Space
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent" android:layout_weight=".8"/>
-            <Button android:id="@+id/registerButton"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".5"
-                    android:text="@string/register_button" android:textAlignment="center"
-                    android:fontFamily="@font/montserrat_bold" android:textColorLink="@color/colorAccent"
-                    android:textColor="@android:color/white" android:background="@color/black_overlay"/>
+            <Button
+                    android:text="@string/check_password"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" android:id="@+id/registerButton" android:layout_weight=".5"
+                    android:background="@color/Yellow" android:textSize="18sp" android:elevation="0dp"
+                    android:padding="20dp" android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"/>
         </LinearLayout>
     </FrameLayout>
 
