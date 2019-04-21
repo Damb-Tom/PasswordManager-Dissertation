@@ -1,5 +1,8 @@
 package com.tombleroneee.passwordmanager
 
+import android.content.Context
+import android.content.Intent
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -10,10 +13,12 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.list_layout.view.*
 
-class RecyclerClass(private val recyclerList: ArrayList<RecyclerData>) :
+
+class RecyclerClass(private val recyclerList: ArrayList<RecyclerData>, val context: Context?) :
     RecyclerView.Adapter<RecyclerClass.ViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerClass.ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_layout, parent, false))
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_layout, parent, false), context)
     }
 
     override fun getItemCount(): Int {
@@ -25,7 +30,20 @@ class RecyclerClass(private val recyclerList: ArrayList<RecyclerData>) :
         holder.itemView.tag = position
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnLongClickListener {
+    class ViewHolder(itemView: View, val context: Context?) : RecyclerView.ViewHolder(itemView),
+        View.OnLongClickListener, View.OnClickListener {
+        override fun onClick(v: View?) {
+            val intent = Intent(context, SelectedPasswordActivity::class.java).apply {
+                putExtra("TITLE", recyclerListList[v!!.tag.toString().toInt()].title)
+                putExtra("USERNAME", recyclerListList[v.tag.toString().toInt()].username)
+                putExtra("PASSWORD", recyclerListList[v.tag.toString().toInt()].password)
+            }
+            val bundle = intent.extras
+            if (context != null) {
+                startActivity(context, intent, bundle)
+            }
+        }
+
         val mainTitle = itemView.text!!
         private lateinit var database: DatabaseReference
         private lateinit var userId: String
@@ -38,6 +56,7 @@ class RecyclerClass(private val recyclerList: ArrayList<RecyclerData>) :
             }
 
             itemView.setOnLongClickListener(this)
+            itemView.setOnClickListener(this)
         }
 
         override fun onLongClick(v: View?): Boolean {
