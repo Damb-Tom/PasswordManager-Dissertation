@@ -67,7 +67,7 @@ class RecyclerClass(private val recyclerList: ArrayList<RecyclerData>, val conte
 
         override fun onLongClick(v: View?): Boolean {
 
-            AlertDialog.Builder(itemView.context).apply {
+            AlertDialog.Builder(itemView.context, R.style.MyAlertDialogStyle).apply {
                 setTitle("What would you like to do?")
 
                 setPositiveButton("Delete") { dialog, _ ->
