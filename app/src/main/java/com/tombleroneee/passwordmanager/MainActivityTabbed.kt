@@ -282,7 +282,6 @@ class MainActivityTabbed : AppCompatActivity() {
                                 )
                                 if (data.title.isNotEmpty() && data.username.isNotEmpty() && data.password.isNotEmpty()) {
                                     database.child("stored_passwords").child(userID).push().setValue(data)
-                                    Toast.makeText(context, "Stored Password!", Toast.LENGTH_SHORT).show()
                                 }
                             }
 
@@ -370,13 +369,11 @@ class MainActivityTabbed : AppCompatActivity() {
                                 if (data.title.isNotEmpty() && data.username.isNotEmpty() && data.password.isNotEmpty()) {
                                     database = FirebaseDatabase.getInstance().reference
                                     database.child("stored_passwords").child(userID).push().setValue(data)
-                                    Toast.makeText(context, "Stored Password!", Toast.LENGTH_SHORT).show()
                                 }
                             }
                             setNeutralButton("Cancel") { dialog, _ ->
                                 dialog.cancel()
                             }
-
                             show()
                         }
                     }
@@ -410,7 +407,7 @@ class MainActivityTabbed : AppCompatActivity() {
     override fun onBackPressed() {
         if (backPressedTwice) {
             val signOutDialogBox = AlertDialog.Builder(this)
-            signOutDialogBox.setTitle("Sign Out?")
+            signOutDialogBox.setTitle("Sign out?")
             signOutDialogBox.setMessage("Would you like to sign out?")
 
             signOutDialogBox.setPositiveButton("Yes") { dialog, _ ->
