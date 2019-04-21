@@ -67,7 +67,7 @@ class MainActivityTabbed : AppCompatActivity() {
         private fun updateRecyclerView() {
             if (arguments?.getInt(ARG_SECTION_NUMBER) == 1) {
                 rootView.recyclerList.layoutManager = LinearLayoutManager(this.context, LinearLayout.VERTICAL, false)
-                rootView.recyclerList.adapter = RecyclerClass(recyclerListList)
+                rootView.recyclerList.adapter = RecyclerClass(recyclerListList, context)
                 loadingBar.visibility = View.INVISIBLE
             }
         }
@@ -75,7 +75,7 @@ class MainActivityTabbed : AppCompatActivity() {
         private fun generatePassword(length: Int, letters: Boolean, symbols: Boolean, numbers: Boolean): String {
             var generatedPasswordChars = ""
             val usableLetters = "abcdefghijklmnopqrstuvwxyz"
-            val usableSymbols = "!@£$%^&*()"
+            val usableSymbols = "!@£$%^&*(){}[]:<>,.?/`§"
             val usableNumbers = "1234567890"
 
             if (letters)
@@ -279,7 +279,7 @@ class MainActivityTabbed : AppCompatActivity() {
                                     dialogControls[1].text.toString(),
                                     dialogControls[2].text.toString()
                                 )
-                                if (data.title.isNotEmpty() && data.username.isNotEmpty() && data.Password.isNotEmpty()) {
+                                if (data.title.isNotEmpty() && data.username.isNotEmpty() && data.password.isNotEmpty()) {
                                     database.child("stored_passwords").child(userID).push().setValue(data)
                                     Toast.makeText(context, "Stored Password!", Toast.LENGTH_SHORT).show()
                                 }
@@ -366,7 +366,7 @@ class MainActivityTabbed : AppCompatActivity() {
                                     dialogControls[1].text.toString(),
                                     dialogControls[2].text.toString()
                                 )
-                                if (data.title.isNotEmpty() && data.username.isNotEmpty() && data.Password.isNotEmpty()) {
+                                if (data.title.isNotEmpty() && data.username.isNotEmpty() && data.password.isNotEmpty()) {
                                     database = FirebaseDatabase.getInstance().reference
                                     database.child("stored_passwords").child(userID).push().setValue(data)
                                     Toast.makeText(context, "Stored Password!", Toast.LENGTH_SHORT).show()
