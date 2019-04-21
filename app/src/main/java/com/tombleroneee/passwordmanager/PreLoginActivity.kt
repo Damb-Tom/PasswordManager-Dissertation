@@ -34,4 +34,8 @@ class PreLoginActivity : AppCompatActivity() {
         }
 
     }
+
+    override fun onBackPressed() {
+        return
+    }
 }
