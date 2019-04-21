@@ -94,7 +94,7 @@
                       android:orientation="horizontal"
                       tools:ignore="UselessParent">
             <Button
-                    android:text="@string/check_password"
+                    android:text="@string/register_button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" android:id="@+id/registerButton" android:layout_weight=".5"
                     android:background="@color/Yellow" android:textSize="18sp" android:elevation="0dp"
