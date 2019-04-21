@@ -42,4 +42,11 @@
     <string name="main_title_3">Password Checker!</string>
     <string name="check_password">Check Password</string>
     <string name="enter_password_hint">Enter Password!</string>
+    <string name="welcome">Welcome</string>
+    <string name="enter_pin_here">Enter Pin Here!</string>
+    <string name="enter">Enter</string>
+    <string name="confirm_pin">Confirm Pin!</string>
+    <string name="username">Username</string>
+    <string name="show_password">Show Password?</string>
+    <string name="password">Password</string>
 </resources>
