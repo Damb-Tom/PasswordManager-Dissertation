@@ -12,7 +12,9 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
 import android.text.InputType
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -96,110 +98,56 @@ class MainActivityTabbed : AppCompatActivity() {
             return generatedPassword
         }
 
-        fun Int.length() = when (this) {
-            0 -> 1
-            else -> Math.log10(Math.abs(toDouble())).toInt() + 1
-        }
+        private fun testPassword(password: String): Float {
+            val capsReg = "[A-Z]".toRegex()
+            val numsReg = "[0-9]".toRegex()
+            val symsReg = "[^a-z^A-Z^0-9]".toRegex()
+            val caps = capsReg.find(password)
+            val nums = numsReg.find(password)
+            val syms = symsReg.find(password)
 
-        private fun testPassword(password: String): Int {
-            val passwordLength = password.length
+            var len = false
+            if (password.length >= 6) {
+                len = true
+            }
+            var len2 = false
+            if (password.length >= 10) {
+                len2 = true
+            }
+
             Log.d("TEST", "Pass: $password")
-            Log.d("TEST", "Len: $passwordLength")
 
-
-            // TODO: ADDITIONS - Done
-
-            // Characters
-            val testChars = +(passwordLength * 4)
-            Log.d("TEST", "Chars: $testChars")
-
-            var lengthChars = 0
-            var lowerCaseNumber = 0
-            var upperCaseNumber = 0
-            var numbers = 0
-            var symbols = 0
-            var middleNumbersOrSymbols = 0
-
-            for (i in 0 until passwordLength) {
-                if (password[i].isLowerCase()) {
-                    lowerCaseNumber++
-                }
-                if (password[i].isUpperCase()) {
-                    upperCaseNumber++
-                }
-                if (password[i].isLetter()) {
-                    lengthChars++
-                }
-                if (password[i].isDigit()) {
-                    numbers++
-                }
-                if (!password[i].isLetter() && !password[i].isDigit()) {
-                    symbols++
-                }
-                if (!password[i].isLetter()) {
-                    if (i != 0 && i != passwordLength - 1)
-                        middleNumbersOrSymbols++
-                }
+            var total = 0.0F
+            if (caps != null) {
+                total += 1
+                Log.d("TEST", "Caps: ${caps.value}")
+            }
+            if (nums != null) {
+                total += 1
+                Log.d("TEST", "Nums: ${nums.value}")
+            }
+            if (syms != null) {
+                total += 1
+                Log.d("TEST", "Syms: ${syms.value}")
+            }
+            if (len) {
+                total += 1
+                Log.d("TEST", "Len")
+            }
+            if (len2) {
+                total += 1
+                Log.d("TEST", "Len2")
             }
 
-            // Upper Case
-            if (upperCaseNumber != 0) {
-                val testUpper = ((passwordLength - upperCaseNumber) * 2)
-                Log.d("TEST", "Upper: $testUpper")
-            }
 
-            // Lower Case
-            if (lowerCaseNumber != 0) {
-                val testLower = ((passwordLength - lowerCaseNumber) * 2)
-                Log.d("TEST", "Lower: $testLower")
-            }
-
-            // Numbers
-            val testNumbers = (numbers * 4)
-            Log.d("TEST", "Numbers: $testNumbers")
-
-            // Symbols
-            val testSymbols = (symbols * 6)
-            Log.d("TEST", "Symbols: $testSymbols")
-
-            // Middle Numbers or Symbols
-            val testNumbersOrSymbols = (middleNumbersOrSymbols * 2)
-            Log.d("TEST", "Middle Numbers or Symbols: $testNumbersOrSymbols")
-
-            // Minimum Requirements
-            var lengthReached = false
-            var minRequirements = 0
-
-            if (passwordLength >= 8)
-                lengthReached = true
-
-            if (upperCaseNumber > 0)
-                minRequirements++
-            if (lowerCaseNumber > 0)
-                minRequirements++
-            if (numbers > 0)
-                minRequirements++
-            if (symbols > 0)
-                minRequirements++
-
-            if (lengthReached && minRequirements >= 3) {
-                val testRequirements = ((minRequirements + 1) * 2) // 1 = lengthReached
-                Log.d("TEST", "Requirements: $testRequirements")
-            }
-
-            // TODO: DEDUCTIONS
-            // Letters
-            val testDeductionLetters = (lengthChars)
-            Log.d("TEST", "Letters: $testDeductionLetters")
-
-            // Numbers
-            val testDeductionNumbers = (numbers)
-            Log.d("TEST", "Letters: $testDeductionNumbers")
-
-            return 0
+            return (total / 5) * 100
         }
 
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? {
             when {
                 arguments?.getInt(ARG_SECTION_NUMBER) == 1 -> {
                     rootView = inflater.inflate(R.layout.fragment_main_activity_tabbed, container, false)
@@ -311,7 +259,8 @@ class MainActivityTabbed : AppCompatActivity() {
                         }
                     }
                     rootView.btnCopy.setOnClickListener {
-                        val clipboardManager = this.context!!.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
+                        val clipboardManager =
+                            this.context!!.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
                         val textToCopy = ClipData.newPlainText("text", rootView.txtGeneratedPass.text)
                         clipboardManager?.primaryClip = textToCopy
                         Toast.makeText(context, "Copied password to clipboard!", Toast.LENGTH_SHORT).show()
@@ -381,10 +330,23 @@ class MainActivityTabbed : AppCompatActivity() {
                 arguments?.getInt(ARG_SECTION_NUMBER) == 3 -> {
                     rootView = inflater.inflate(R.layout.fragment_main_activity_tabbed_3, container, false)
 
-                    rootView.btnCheck.setOnClickListener {
-                        val result = testPassword(rootView.txtPassInput.text.toString())
-                        Toast.makeText(context, "$result%", Toast.LENGTH_SHORT).show()
-                    }
+                    rootView.txtPassInput.addTextChangedListener(object : TextWatcher {
+                        override fun afterTextChanged(p0: Editable?) {
+                            val result = testPassword(rootView.txtPassInput.text.toString()).toInt()
+                            rootView.passwordStrengthBar.progress = result
+                        }
+
+                        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                            val result = testPassword(rootView.txtPassInput.text.toString()).toInt()
+                            rootView.passwordStrengthBar.progress = result
+                        }
+
+                        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                            val result = testPassword(rootView.txtPassInput.text.toString()).toInt()
+                            rootView.passwordStrengthBar.progress = result
+                        }
+
+                    })
                 }
             }
             return rootView

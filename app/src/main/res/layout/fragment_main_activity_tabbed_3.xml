@@ -35,6 +35,26 @@
                 app:layout_constraintVertical_bias="0.100000024" android:textColor="@color/White"
                 android:textColorHint="@color/lightWhite" android:textAlignment="center"
                 android:hint="@string/enter_password_hint" android:autofillHints=""/>
+        <TextView
+                android:text="@string/password_strength_checker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/textView"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/txtPassInput" android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/passwordStrengthBar"
+                app:layout_constraintVertical_bias="1.0" android:textColor="#FFFFFF" android:textStyle="bold"
+                android:textAlignment="center"/>
+        <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="219dp"
+                android:layout_height="52dp"
+                android:id="@+id/passwordStrengthBar"
+                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/txtPassInput"
+                android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent" android:max="100"
+                android:progress="0" android:background="#00FF0000"/>
     </android.support.constraint.ConstraintLayout>
     <FrameLayout android:layout_width="match_parent"
                  android:layout_height="match_parent"
@@ -47,15 +67,7 @@
                       android:layout_height="wrap_content"
                       android:layout_gravity="bottom|center_horizontal"
                       android:orientation="horizontal"
-                      tools:ignore="UselessParent">
-            <Button
-                    android:text="@string/check_password"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" android:id="@+id/btnCheck" android:layout_weight="1"
-                    android:background="@color/Yellow" android:textSize="18sp" android:elevation="0dp"
-                    android:padding="20dp" android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"/>
-        </LinearLayout>
+                      tools:ignore="UselessParent"/>
     </FrameLayout>
 
     <!-- This FrameLayout insets its children based on system windows using

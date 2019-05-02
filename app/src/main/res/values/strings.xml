@@ -8,8 +8,9 @@
     // Activity Titles
     <string name="register_title">Register</string>
     <string name="login_title">Login</string>
-    <string name="main_title">Stored Passwords!</string>
-    <string name="main_title_2">Password Generator!</string>
+    <string name="main_title">Accounts</string>
+    <string name="main_title_2">Password Generator</string>
+    <string name="main_title_3">Password Validator</string>
 
     // Login Activity and Reg
     <string name="email_hint">Enter Email</string>
@@ -35,11 +36,10 @@
     <string name="chk_numbers">Numbers?</string>
     <string name="chk_letters">Letters?</string>
     <string name="generate_password">Generate Password</string>
-    <string name="create_saved_password">Store Password</string>
+    <string name="create_saved_password">Store Account</string>
     <string name="generated_password">Generated Password</string>
     <string name="copy_password">Copy</string>
     <string name="save_password">Save</string>
-    <string name="main_title_3">Password Checker!</string>
     <string name="check_password">Check Password</string>
     <string name="enter_password_hint">Enter Password!</string>
     <string name="welcome">Welcome</string>
@@ -49,4 +49,5 @@
     <string name="username">Username</string>
     <string name="show_password">Show Password?</string>
     <string name="password">Password</string>
+    <string name="password_strength_checker">Password Strength</string>
 </resources>

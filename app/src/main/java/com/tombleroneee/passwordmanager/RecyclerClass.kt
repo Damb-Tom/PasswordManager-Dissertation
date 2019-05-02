@@ -49,17 +49,15 @@ class RecyclerClass(private val recyclerList: ArrayList<RecyclerData>, val conte
         }
 
         val mainTitle = itemView.text!!
-        private lateinit var database: DatabaseReference
-        private lateinit var userId: String
+        private var database: DatabaseReference
+        private var userId: String
         private var dialogControls = ArrayList<EditText>()
 
         init {
             val user = FirebaseAuth.getInstance().currentUser
             userId = user!!.uid
-            if (user != null) {
-                userId = user.uid
-                database = FirebaseDatabase.getInstance().reference.child("stored_passwords").child(userId)
-            }
+            userId = user.uid
+            database = FirebaseDatabase.getInstance().reference.child("stored_passwords").child(userId)
 
             itemView.setOnLongClickListener(this)
             itemView.setOnClickListener(this)
