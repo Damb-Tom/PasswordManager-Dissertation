@@ -96,44 +96,6 @@ class MainActivityTabbed : AppCompatActivity() {
             return generatedPassword
         }
 
-        private fun testPassword(password: String): Float {
-            val capsReg = "[A-Z]".toRegex()
-            val numsReg = "[0-9]".toRegex()
-            val symsReg = "[^a-z^A-Z^0-9]".toRegex()
-            val caps = capsReg.find(password)
-            val nums = numsReg.find(password)
-            val syms = symsReg.find(password)
-
-            var len = false
-            if (password.length >= 6) {
-                len = true
-            }
-            var len2 = false
-            if (password.length >= 10) {
-                len2 = true
-            }
-
-            var total = 0.0F
-            if (caps != null) {
-                total += 1
-            }
-            if (nums != null) {
-                total += 1
-            }
-            if (syms != null) {
-                total += 1
-            }
-            if (len) {
-                total += 1
-            }
-            if (len2) {
-                total += 1
-            }
-
-
-            return (total / 5) * 100
-        }
-
         fun getFromDB(userID: String, list: ArrayList<RecyclerData>, withUpdate: Boolean = true) {
             database.child("stored_passwords").child(userID).orderByKey()
                 .addValueEventListener(object : ValueEventListener {
@@ -155,7 +117,7 @@ class MainActivityTabbed : AppCompatActivity() {
                                 )
                             )
                         }
-                        if(withUpdate) {
+                        if (withUpdate) {
                             updateRecyclerView(list)
                         }
                     }
@@ -196,7 +158,8 @@ class MainActivityTabbed : AppCompatActivity() {
                     }
 
                     val spinnerOptions = arrayOf("None", "Ascending", "Descending")
-                    rootView.spinnerSort.adapter = ArrayAdapter<String>(context!!, R.layout.spinner_layout, spinnerOptions)
+                    rootView.spinnerSort.adapter =
+                        ArrayAdapter<String>(context!!, R.layout.spinner_layout, spinnerOptions)
 
                     val user = FirebaseAuth.getInstance().currentUser
                     val userID = user!!.uid
@@ -291,7 +254,7 @@ class MainActivityTabbed : AppCompatActivity() {
                                     tempRecyclerListList.clear()
                                     var newData = recyclerListList.sortedWith(compareBy { it.title.toLowerCase() })
                                     recyclerListList.clear()
-                                    for(obj in newData){
+                                    for (obj in newData) {
                                         tempRecyclerListList.add(obj)
                                     }
                                     updateRecyclerView(tempRecyclerListList)
@@ -301,7 +264,7 @@ class MainActivityTabbed : AppCompatActivity() {
                                     tempRecyclerListList.clear()
                                     var newData = recyclerListList.sortedWith(compareBy { it.title.toLowerCase() })
                                     recyclerListList.clear()
-                                    for(obj in newData){
+                                    for (obj in newData) {
                                         tempRecyclerListList.add(obj)
                                     }
                                     tempRecyclerListList.reverse()
@@ -397,22 +360,24 @@ class MainActivityTabbed : AppCompatActivity() {
                 }
                 arguments?.getInt(ARG_SECTION_NUMBER) == 3 -> {
                     rootView = inflater.inflate(R.layout.fragment_main_activity_tabbed_3, container, false)
-                    rootView.passwordStrengthBar.progressDrawable = ContextCompat.getDrawable(this.context!!, R.drawable.progress_style)
+                    rootView.passwordStrengthBar.progressDrawable =
+                        ContextCompat.getDrawable(this.context!!, R.drawable.progress_style)
 
 
                     rootView.txtPassInput.addTextChangedListener(object : TextWatcher {
+                        var passwordStrengthObj = PasswordStrengthHelper()
                         override fun afterTextChanged(p0: Editable?) {
-                            val result = testPassword(rootView.txtPassInput.text.toString()).toInt()
+                            val result = passwordStrengthObj.testPassword(rootView.txtPassInput.text.toString()).toInt()
                             rootView.passwordStrengthBar.progress = result
                         }
 
                         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                            val result = testPassword(rootView.txtPassInput.text.toString()).toInt()
+                            val result = passwordStrengthObj.testPassword(rootView.txtPassInput.text.toString()).toInt()
                             rootView.passwordStrengthBar.progress = result
                         }
 
                         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                            val result = testPassword(rootView.txtPassInput.text.toString()).toInt()
+                            val result = passwordStrengthObj.testPassword(rootView.txtPassInput.text.toString()).toInt()
                             rootView.passwordStrengthBar.progress = result
                         }
                     })
