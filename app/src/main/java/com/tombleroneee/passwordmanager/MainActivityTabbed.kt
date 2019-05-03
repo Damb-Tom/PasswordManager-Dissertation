@@ -179,6 +179,7 @@ class MainActivityTabbed : AppCompatActivity() {
             updateRecyclerView(tempRecyclerListList)
         }
 
+        var firstRun: Boolean = false
         override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -188,8 +189,11 @@ class MainActivityTabbed : AppCompatActivity() {
                 arguments?.getInt(ARG_SECTION_NUMBER) == 1 -> {
                     rootView = inflater.inflate(R.layout.fragment_main_activity_tabbed, container, false)
 
-                    Snackbar.make(rootView, "Swipe left and right to navigate pages!", Snackbar.LENGTH_INDEFINITE)
-                        .setAction("Hide Tip") {}.show()
+                    if (!firstRun) {
+                        Snackbar.make(rootView, "Swipe left and right to navigate pages!", Snackbar.LENGTH_INDEFINITE)
+                            .setAction("Hide Tip") {}.show()
+                        firstRun = true
+                    }
 
                     val spinnerOptions = arrayOf("None", "Ascending", "Descending")
                     rootView.spinnerSort.adapter = ArrayAdapter<String>(context!!, R.layout.spinner_layout, spinnerOptions)
@@ -285,7 +289,7 @@ class MainActivityTabbed : AppCompatActivity() {
                                 1 -> { // ascending
                                     getFromDB(userID, recyclerListList, false)
                                     tempRecyclerListList.clear()
-                                    var newData = recyclerListList.sortedWith(compareBy { it.title})
+                                    var newData = recyclerListList.sortedWith(compareBy { it.title.toLowerCase() })
                                     recyclerListList.clear()
                                     for(obj in newData){
                                         tempRecyclerListList.add(obj)
@@ -295,7 +299,7 @@ class MainActivityTabbed : AppCompatActivity() {
                                 2 -> { // descending
                                     getFromDB(userID, recyclerListList, false)
                                     tempRecyclerListList.clear()
-                                    var newData = recyclerListList.sortedWith(compareBy { it.title})
+                                    var newData = recyclerListList.sortedWith(compareBy { it.title.toLowerCase() })
                                     recyclerListList.clear()
                                     for(obj in newData){
                                         tempRecyclerListList.add(obj)
