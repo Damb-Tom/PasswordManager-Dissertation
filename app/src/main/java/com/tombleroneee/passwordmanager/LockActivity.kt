@@ -8,7 +8,9 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_lock.*
 
+
 class LockActivity : AppCompatActivity() {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,8 +29,8 @@ class LockActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        var settings = applicationContext.getSharedPreferences("USER_DATA", 0)
-        val pinAlreadyCreated = settings.getBoolean("pinAlreadyCreated", false)
+        val pinLock = PinLockHelper(applicationContext)
+        val pinAlreadyCreated = pinLock.isPinCreated()
 
         if (!pinAlreadyCreated) {
             fullscreen_content.text = "Welcome"
@@ -51,15 +53,13 @@ class LockActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
 
-                val editor = settings.edit()
-                editor.putBoolean("pinAlreadyCreated", true)
-                editor.putInt("storedPin", txtPin1.text.toString().toInt())
-                editor.apply()
+                pinLock.setPin(txtPin1.text.toString().toInt())
+
                 Toast.makeText(applicationContext, "Pin Saved!", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, PreLoginActivity::class.java)
                 startActivity(intent)
             } else {
-                val pin = settings.getInt("storedPin", 0)
+                val pin = pinLock.getPin()
                 if (txtPin1.text.toString().toInt() == pin) {
                     val intent = Intent(this, PreLoginActivity::class.java)
                     startActivity(intent)

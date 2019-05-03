@@ -172,7 +172,7 @@ class MainActivityTabbed : AppCompatActivity() {
                     rootView = inflater.inflate(R.layout.fragment_main_activity_tabbed, container, false)
 
                     val spinnerOptions = arrayOf("None", "Ascending", "Descending")
-                    rootView.spinnerSort.adapter = ArrayAdapter<String>(context, R.layout.spinner_layout, spinnerOptions)
+                    rootView.spinnerSort.adapter = ArrayAdapter<String>(context!!, R.layout.spinner_layout, spinnerOptions)
 
                     val user = FirebaseAuth.getInstance().currentUser
                     val userID = user!!.uid
@@ -256,7 +256,12 @@ class MainActivityTabbed : AppCompatActivity() {
                                     tempRecyclerListList.add(recyclerListList[i])
                                 }
                             }
-                            rootView.txtSearchResults.text = "${tempRecyclerListList.size} results found!"
+                            rootView.txtSearchResults.text = if (tempRecyclerListList.size == 0) {
+                                "No results found!"
+                            } else {
+                                "${tempRecyclerListList.size} results found!"
+                            }
+
                             updateRecyclerView(tempRecyclerListList)
                         }
                     })
@@ -381,7 +386,7 @@ class MainActivityTabbed : AppCompatActivity() {
                 }
                 arguments?.getInt(ARG_SECTION_NUMBER) == 3 -> {
                     rootView = inflater.inflate(R.layout.fragment_main_activity_tabbed_3, container, false)
-                    rootView.passwordStrengthBar.progressDrawable = ContextCompat.getDrawable(this!!.context!!, R.drawable.progress_style)
+                    rootView.passwordStrengthBar.progressDrawable = ContextCompat.getDrawable(this.context!!, R.drawable.progress_style)
 
 
                     rootView.txtPassInput.addTextChangedListener(object : TextWatcher {

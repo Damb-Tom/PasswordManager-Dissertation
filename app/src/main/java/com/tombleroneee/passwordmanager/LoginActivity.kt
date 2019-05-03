@@ -4,10 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Patterns
+import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import kotlinx.android.synthetic.main.activity_lock.*
 import kotlinx.android.synthetic.main.activity_login.*
+import java.util.concurrent.locks.Lock
 
 class LoginActivity : AppCompatActivity() {
 
@@ -34,8 +37,17 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     if (validateEmail()) {
                         createToast("Successfully Logged In!", Toast.LENGTH_SHORT)
-                        val intent = Intent(this, MainActivityTabbed::class.java)
-                        startActivity(intent)
+
+                        val pinLock = PinLockHelper(applicationContext)
+                        val pinAlreadyCreated = pinLock.isPinCreated()
+
+                        if(pinAlreadyCreated) {
+                            val intent = Intent(this, MainActivityTabbed::class.java)
+                            startActivity(intent)
+                        }else{
+                            val intent = Intent(this, LockActivity::class.java)
+                            startActivity(intent)
+                        }
                     }
                 } else {
                     createToast("Invalid Username or Password, try again!", Toast.LENGTH_SHORT)
