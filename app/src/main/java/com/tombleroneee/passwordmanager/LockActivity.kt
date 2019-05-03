@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_lock.*
 
 class LockActivity : AppCompatActivity() {
@@ -12,6 +13,19 @@ class LockActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock)
+
+        FirebaseAuth.AuthStateListener { auth ->
+            val user = auth.currentUser
+            if (user != null) {
+                val intent = Intent(this, PreLoginActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            val intent = Intent(this, PreLoginActivity::class.java)
+            startActivity(intent)
+        }
 
         var settings = applicationContext.getSharedPreferences("USER_DATA", 0)
         val pinAlreadyCreated = settings.getBoolean("pinAlreadyCreated", false)

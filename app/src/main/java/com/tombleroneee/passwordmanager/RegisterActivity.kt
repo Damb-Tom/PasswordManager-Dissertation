@@ -2,12 +2,10 @@ package com.tombleroneee.passwordmanager
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.support.v7.app.AppCompatActivity
 import android.util.Patterns
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.android.synthetic.main.activity_register.*
 
@@ -68,5 +66,10 @@ class RegisterActivity : AppCompatActivity() {
                     }
                 }
         }
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, PreLoginActivity::class.java)
+        startActivity(intent)
     }
 }

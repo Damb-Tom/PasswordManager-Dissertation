@@ -33,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     if (validateEmail()) {
+                        createToast("Successfully Logged In!", Toast.LENGTH_SHORT)
                         val intent = Intent(this, MainActivityTabbed::class.java)
                         startActivity(intent)
                     }
@@ -110,9 +111,13 @@ class LoginActivity : AppCompatActivity() {
         loginButton.setOnClickListener {
             var email = emailField.text.toString()
             val password = passwordField.text.toString()
-
             attemptLogin(email, password)
         }
         // TODO: PRESSING ENTER WHILE LOGGING IN WILL RESET YOUR PASSWORD..
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, PreLoginActivity::class.java)
+        startActivity(intent)
     }
 }

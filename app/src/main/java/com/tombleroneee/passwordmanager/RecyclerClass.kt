@@ -70,7 +70,7 @@ class RecyclerClass(private val recyclerList: ArrayList<RecyclerData>, val conte
 
                 setPositiveButton("Delete") { dialog, _ ->
                     dialog.dismiss()
-                    recyclerListList[v!!.tag.toString().toInt()].urlRef.setValue(null)
+                    recyclerListList[v!!.tag.toString().toInt()].titleRef.setValue(null)
                     recyclerListList[v.tag.toString().toInt()].usernameRef.setValue(null)
                     recyclerListList[v.tag.toString().toInt()].passwordRef.setValue(null)
                 }
@@ -126,7 +126,7 @@ class RecyclerClass(private val recyclerList: ArrayList<RecyclerData>, val conte
                                 dialogControls[2].text.toString()
                             )
                             if (data.title.isNotEmpty() && data.username.isNotEmpty() && data.password.isNotEmpty()) {
-                                recyclerListList[v!!.tag.toString().toInt()].urlRef.setValue(data.title)
+                                recyclerListList[v!!.tag.toString().toInt()].titleRef.setValue(data.title)
                                 recyclerListList[v.tag.toString().toInt()].usernameRef.setValue(data.username)
                                 recyclerListList[v.tag.toString().toInt()].passwordRef.setValue(data.password)
                             }

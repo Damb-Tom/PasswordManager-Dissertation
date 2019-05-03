@@ -7,8 +7,9 @@ data class RecyclerData(
     val title: String,
     val username: String,
     val password: String,
-    val urlRef: DatabaseReference,
+    val titleRef: DatabaseReference,
     val usernameRef: DatabaseReference,
     val passwordRef: DatabaseReference
 )
 var recyclerListList = ArrayList<RecyclerData>()
+var tempRecyclerListList = ArrayList<RecyclerData>()

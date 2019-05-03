@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "333295851465-2ik2hv4kdfln9ucet1sul12jrt662qss.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tombleroneee.passwordmanager",
+            "certificate_hash": "a2abcf75dc038695fa397cc9750cad1aeb3c182a"
+          }
+        },
+        {
           "client_id": "333295851465-dftbioobcb75i388frit5dff4sv5dqjm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -33,20 +41,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "333295851465-quk6apgl2gh2d2mjiupn42hi2e46vb45.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }
