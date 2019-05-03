@@ -70,7 +70,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" android:id="@+id/btnEnter"
                     android:layout_weight="1"
-                    android:background="@color/Yellow" android:textSize="18sp" android:elevation="0dp"
+                    android:background="@drawable/button_style" android:textSize="18sp" android:elevation="0dp"
                     android:padding="20dp" android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"/>
         </LinearLayout>

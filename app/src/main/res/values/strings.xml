@@ -50,4 +50,6 @@
     <string name="show_password">Show Password?</string>
     <string name="password">Password</string>
     <string name="password_strength_checker">Password Strength</string>
+    <string name="enter_search_criteria">Enter Search Criteria</string>
+    <string name="_0_results_found">0 results found</string>
 </resources>

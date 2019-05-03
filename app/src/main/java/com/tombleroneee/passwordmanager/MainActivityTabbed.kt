@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
@@ -15,7 +16,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -162,6 +162,23 @@ class MainActivityTabbed : AppCompatActivity() {
                 })
         }
 
+        fun sortData() {
+            txtSearchResults.visibility = View.VISIBLE
+            tempRecyclerListList.clear()
+            for (i in 0 until recyclerListList.size) {
+                if (recyclerListList[i].title.toLowerCase().contains(searchField.text.toString().toLowerCase())) {
+                    tempRecyclerListList.add(recyclerListList[i])
+                }
+            }
+            rootView.txtSearchResults.text = if (tempRecyclerListList.size == 0) {
+                "No results found!"
+            } else {
+                "${tempRecyclerListList.size} results found!"
+            }
+
+            updateRecyclerView(tempRecyclerListList)
+        }
+
         override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -170,6 +187,9 @@ class MainActivityTabbed : AppCompatActivity() {
             when {
                 arguments?.getInt(ARG_SECTION_NUMBER) == 1 -> {
                     rootView = inflater.inflate(R.layout.fragment_main_activity_tabbed, container, false)
+
+                    Snackbar.make(rootView, "Swipe left and right to navigate pages!", Snackbar.LENGTH_INDEFINITE)
+                        .setAction("Hide Tip") {}.show()
 
                     val spinnerOptions = arrayOf("None", "Ascending", "Descending")
                     rootView.spinnerSort.adapter = ArrayAdapter<String>(context!!, R.layout.spinner_layout, spinnerOptions)
@@ -249,20 +269,7 @@ class MainActivityTabbed : AppCompatActivity() {
                         }
 
                         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                            txtSearchResults.visibility = View.VISIBLE
-                            tempRecyclerListList.clear()
-                            for (i in 0 until recyclerListList.size) {
-                                if (recyclerListList[i].title.toLowerCase().contains(searchField.text.toString().toLowerCase())) {
-                                    tempRecyclerListList.add(recyclerListList[i])
-                                }
-                            }
-                            rootView.txtSearchResults.text = if (tempRecyclerListList.size == 0) {
-                                "No results found!"
-                            } else {
-                                "${tempRecyclerListList.size} results found!"
-                            }
-
-                            updateRecyclerView(tempRecyclerListList)
+                            sortData()
                         }
                     })
 

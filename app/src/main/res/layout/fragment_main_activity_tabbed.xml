@@ -32,18 +32,19 @@
                 app:layout_constraintEnd_toEndOf="@+id/fullscreen_content" android:layout_marginStart="8dp"
                 app:layout_constraintStart_toStartOf="@+id/fullscreen_content"
                 app:layout_constraintBottom_toTopOf="@+id/recyclerList"
-                android:hint="Enter Search Criteria" android:textAlignment="center" android:textColor="#FFFFFF"
+                android:hint="@string/enter_search_criteria" android:textAlignment="center" android:textColor="#FFFFFF"
                 android:textColorHint="#FFFFFF"
-                app:layout_constraintTop_toBottomOf="@+id/fullscreen_content" app:layout_constraintVertical_bias="0.0"/>
+                app:layout_constraintTop_toBottomOf="@+id/fullscreen_content" app:layout_constraintVertical_bias="0.0"
+                android:autofillHints=""/>
         <TextView
-                android:text="0 results found"
+                android:text="@string/_0_results_found"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/txtSearchResults"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="@+id/fullscreen_content"
                 android:layout_marginStart="8dp" app:layout_constraintBottom_toTopOf="@+id/recyclerList"
                 app:layout_constraintTop_toBottomOf="@+id/searchField"
-                app:layout_constraintVertical_bias="0.0" android:textSize="10sp" android:textColor="#FFFFFF"
+                app:layout_constraintVertical_bias="0.0" android:textSize="12sp" android:textColor="#FFFFFF"
                 android:textAlignment="center" tools:visibility="visible" android:visibility="invisible"/>
         <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
@@ -90,7 +91,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" android:id="@+id/btnCreateSavedPassword"
                     android:layout_weight="1"
-                    android:background="@color/Yellow" android:textSize="18sp" android:elevation="0dp"
+                    android:background="@drawable/button_style" android:textSize="18sp" android:elevation="0dp"
                     android:padding="20dp" android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"/>
         </LinearLayout>
