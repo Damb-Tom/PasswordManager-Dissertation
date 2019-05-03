@@ -56,6 +56,8 @@ class LockActivity : AppCompatActivity() {
                 editor.putInt("storedPin", txtPin1.text.toString().toInt())
                 editor.apply()
                 Toast.makeText(applicationContext, "Pin Saved!", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, PreLoginActivity::class.java)
+                startActivity(intent)
             } else {
                 val pin = settings.getInt("storedPin", 0)
                 if (txtPin1.text.toString().toInt() == pin) {

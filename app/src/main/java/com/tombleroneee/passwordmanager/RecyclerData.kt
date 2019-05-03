@@ -13,3 +13,4 @@ data class RecyclerData(
 )
 var recyclerListList = ArrayList<RecyclerData>()
 var tempRecyclerListList = ArrayList<RecyclerData>()
+var tempRecyclerListList2 = ArrayList<RecyclerData>()

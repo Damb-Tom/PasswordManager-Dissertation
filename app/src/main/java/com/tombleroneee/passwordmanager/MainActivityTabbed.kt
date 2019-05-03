@@ -19,9 +19,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_main_tabbed.*
@@ -67,10 +65,10 @@ class MainActivityTabbed : AppCompatActivity() {
         lateinit var rootView: View
         private var dialogControls = ArrayList<EditText>()
 
-        private fun updateRecyclerView() {
+        private fun updateRecyclerView(list: ArrayList<RecyclerData>) {
             if (arguments?.getInt(ARG_SECTION_NUMBER) == 1) {
                 rootView.recyclerList.layoutManager = LinearLayoutManager(this.context, LinearLayout.VERTICAL, false)
-                rootView.recyclerList.adapter = RecyclerClass(recyclerListList, context)
+                rootView.recyclerList.adapter = RecyclerClass(list, context)
                 loadingBar.visibility = View.INVISIBLE
             }
         }
@@ -136,18 +134,17 @@ class MainActivityTabbed : AppCompatActivity() {
             return (total / 5) * 100
         }
 
-        fun getFromDBwithReturn(userID: String): ArrayList<RecyclerData> {
-            var localRecyclerListList = ArrayList<RecyclerData>()
+        fun getFromDB(userID: String, list: ArrayList<RecyclerData>, withUpdate: Boolean = true) {
             database.child("stored_passwords").child(userID).orderByKey()
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(p0: DatabaseError) {
                     }
 
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        localRecyclerListList.clear()
+                        list.clear()
 
                         for (ds in dataSnapshot.children) {
-                            localRecyclerListList.add(
+                            list.add(
                                 RecyclerData(
                                     ds.child("title").value.toString(),
                                     ds.child("username").value.toString(),
@@ -158,34 +155,9 @@ class MainActivityTabbed : AppCompatActivity() {
                                 )
                             )
                         }
-                    }
-                })
-            return localRecyclerListList
-        }
-
-        fun getFromDB(userID: String) {
-            database.child("stored_passwords").child(userID).orderByKey()
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(p0: DatabaseError) {
-                    }
-
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        recyclerListList.clear()
-
-                        for (ds in dataSnapshot.children) {
-                            recyclerListList.add(
-                                RecyclerData(
-                                    ds.child("title").value.toString(),
-                                    ds.child("username").value.toString(),
-                                    ds.child("password").value.toString(),
-                                    ds.child("title").ref,
-                                    ds.child("username").ref,
-                                    ds.child("password").ref
-                                )
-                            )
+                        if(withUpdate) {
+                            updateRecyclerView(list)
                         }
-                        Log.d("TEST", "AHH")
-                        updateRecyclerView()
                     }
                 })
         }
@@ -199,12 +171,15 @@ class MainActivityTabbed : AppCompatActivity() {
                 arguments?.getInt(ARG_SECTION_NUMBER) == 1 -> {
                     rootView = inflater.inflate(R.layout.fragment_main_activity_tabbed, container, false)
 
+                    val spinnerOptions = arrayOf("None", "Ascending", "Descending")
+                    rootView.spinnerSort.adapter = ArrayAdapter<String>(context, R.layout.spinner_layout, spinnerOptions)
+
                     val user = FirebaseAuth.getInstance().currentUser
                     val userID = user!!.uid
 
                     database = FirebaseDatabase.getInstance().reference
 
-                    getFromDB(userID)
+                    getFromDB(userID, recyclerListList)
 
 
                     rootView.btnCreateSavedPassword.setOnClickListener {
@@ -274,38 +249,51 @@ class MainActivityTabbed : AppCompatActivity() {
                         }
 
                         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                            txtSearchResults.visibility = View.VISIBLE
                             tempRecyclerListList.clear()
                             for (i in 0 until recyclerListList.size) {
-                                tempRecyclerListList.add(recyclerListList[i])
-                            }
-
-                            recyclerListList.clear()
-                            var noneFound = true
-                            for (i in 0 until tempRecyclerListList.size) {
-                                if (tempRecyclerListList[i].title.toLowerCase().contains(searchField.text.toString().toLowerCase())) {
-                                    noneFound = false
-                                    recyclerListList.add(
-                                        RecyclerData(
-                                            tempRecyclerListList[i].title,
-                                            tempRecyclerListList[i].username,
-                                            tempRecyclerListList[i].password,
-                                            tempRecyclerListList[i].titleRef,
-                                            tempRecyclerListList[i].usernameRef,
-                                            tempRecyclerListList[i].passwordRef
-                                        )
-                                    )
+                                if (recyclerListList[i].title.toLowerCase().contains(searchField.text.toString().toLowerCase())) {
+                                    tempRecyclerListList.add(recyclerListList[i])
                                 }
                             }
-                            if (noneFound || searchField.text.isEmpty()) {
-                                getFromDB(userID)
-                                rootView.txtSearchResults.text = "0 results found!"
-                            } else {
-                                rootView.txtSearchResults.text = "${recyclerListList.size} results found!"
-                            }
-                            updateRecyclerView()
+                            rootView.txtSearchResults.text = "${tempRecyclerListList.size} results found!"
+                            updateRecyclerView(tempRecyclerListList)
+                        }
+                    })
+
+                    rootView.spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onNothingSelected(p0: AdapterView<*>?) {
                         }
 
-                    })
+                        override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                            when (p2) {
+                                0 -> { // none
+                                    getFromDB(userID, recyclerListList)
+                                }
+                                1 -> { // ascending
+                                    getFromDB(userID, recyclerListList, false)
+                                    tempRecyclerListList.clear()
+                                    var newData = recyclerListList.sortedWith(compareBy { it.title})
+                                    recyclerListList.clear()
+                                    for(obj in newData){
+                                        tempRecyclerListList.add(obj)
+                                    }
+                                    updateRecyclerView(tempRecyclerListList)
+                                }
+                                2 -> { // descending
+                                    getFromDB(userID, recyclerListList, false)
+                                    tempRecyclerListList.clear()
+                                    var newData = recyclerListList.sortedWith(compareBy { it.title})
+                                    recyclerListList.clear()
+                                    for(obj in newData){
+                                        tempRecyclerListList.add(obj)
+                                    }
+                                    tempRecyclerListList.reverse()
+                                    updateRecyclerView(tempRecyclerListList)
+                                }
+                            }
+                        }
+                    }
                 }
                 arguments?.getInt(ARG_SECTION_NUMBER) == 2 -> {
                     rootView = inflater.inflate(R.layout.fragment_main_activity_tabbed_2, container, false)
@@ -393,6 +381,8 @@ class MainActivityTabbed : AppCompatActivity() {
                 }
                 arguments?.getInt(ARG_SECTION_NUMBER) == 3 -> {
                     rootView = inflater.inflate(R.layout.fragment_main_activity_tabbed_3, container, false)
+                    rootView.passwordStrengthBar.progressDrawable = ContextCompat.getDrawable(this!!.context!!, R.drawable.progress_style)
+
 
                     rootView.txtPassInput.addTextChangedListener(object : TextWatcher {
                         override fun afterTextChanged(p0: Editable?) {

@@ -46,9 +46,10 @@
                 app:layout_constraintVertical_bias="1.0" android:textColor="#FFFFFF" android:textStyle="bold"
                 android:textAlignment="center"/>
         <ProgressBar
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="219dp"
-                android:layout_height="52dp"
+                style="@android:style/Widget.Material.ProgressBar.Horizontal"
+                android:progressDrawable="@drawable/progress_style"
+                android:layout_width="250dp"
+                android:layout_height="25dp"
                 android:id="@+id/passwordStrengthBar"
                 app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
