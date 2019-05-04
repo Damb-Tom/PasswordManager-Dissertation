@@ -73,28 +73,6 @@ class MainActivityTabbed : AppCompatActivity() {
             }
         }
 
-        private fun generatePassword(length: Int, letters: Boolean, symbols: Boolean, numbers: Boolean): String {
-            var generatedPasswordChars = ""
-            val usableLetters = "abcdefghijklmnopqrstuvwxyz"
-            val usableSymbols = "!@£$%^&*(){}[]:<>,.?/`§"
-            val usableNumbers = "1234567890"
-
-            if (letters)
-                generatedPasswordChars += usableLetters
-            if (letters)
-                generatedPasswordChars += usableLetters.toUpperCase()
-            if (symbols)
-                generatedPasswordChars += usableSymbols
-            if (numbers)
-                generatedPasswordChars += usableNumbers
-
-            var generatedPassword = ""
-            for (i in 0..length) {
-                val randomChar = (0 until generatedPasswordChars.length).random()
-                generatedPassword += generatedPasswordChars[randomChar]
-            }
-            return generatedPassword
-        }
 
         fun getFromDB(userID: String, list: ArrayList<RecyclerData>, withUpdate: Boolean = true) {
             database.child("stored_passwords").child(userID).orderByKey()
@@ -278,7 +256,8 @@ class MainActivityTabbed : AppCompatActivity() {
                     rootView = inflater.inflate(R.layout.fragment_main_activity_tabbed_2, container, false)
                     rootView.btnGenerate.setOnClickListener {
                         if (rootView.chkLetters.isChecked || rootView.chkSymbols.isChecked || rootView.chkNumbers.isChecked) {
-                            val pass = generatePassword(
+                            var passwordGenObj = PasswordGeneratorHelper()
+                            val pass = passwordGenObj.generatePassword(
                                 rootView.strengthSeekBar.progress,
                                 rootView.chkLetters.isChecked,
                                 rootView.chkSymbols.isChecked,

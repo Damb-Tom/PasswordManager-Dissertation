@@ -2,8 +2,8 @@ package com.tombleroneee.passwordmanager
 
 
 class PasswordStrengthHelper {
-    val passwordMedStrength = 6
-    val passwordHighStrength = 10
+    private val passwordMedStrength = 6
+    private val passwordHighStrength = 10
 
     fun testPassword(password: String): Float {
         val capsReg = "[A-Z]".toRegex()
