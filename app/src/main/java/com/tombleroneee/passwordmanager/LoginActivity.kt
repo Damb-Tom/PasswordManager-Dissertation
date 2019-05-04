@@ -4,13 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Patterns
-import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import kotlinx.android.synthetic.main.activity_lock.*
 import kotlinx.android.synthetic.main.activity_login.*
-import java.util.concurrent.locks.Lock
 
 class LoginActivity : AppCompatActivity() {
 
@@ -22,12 +19,12 @@ class LoginActivity : AppCompatActivity() {
         Toast.makeText(baseContext, text, stayTime).show()
     }
 
-    private fun attemptLogin(email: String, password: String){
+    private fun attemptLogin(email: String, password: String) {
         if (email.isEmpty() || password.isEmpty()) {
             createToast("Please enter an Email and Password!", Toast.LENGTH_SHORT)
             return
         }
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             createToast("Invalid Email Address!", Toast.LENGTH_SHORT)
             return
         }
@@ -41,10 +38,10 @@ class LoginActivity : AppCompatActivity() {
                         val pinLock = PinLockHelper(applicationContext)
                         val pinAlreadyCreated = pinLock.isPinCreated()
 
-                        if(pinAlreadyCreated) {
+                        if (pinAlreadyCreated) {
                             val intent = Intent(this, MainActivityTabbed::class.java)
                             startActivity(intent)
-                        }else{
+                        } else {
                             val intent = Intent(this, LockActivity::class.java)
                             startActivity(intent)
                         }
@@ -57,8 +54,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun validateEmail(): Boolean {
-        user = auth.currentUser!!
-        var emailVerified = user.isEmailVerified
+        var firebaseObj = FirebaseHelper()
+        var emailVerified = firebaseObj.isEmailVerified()
         if (emailVerified) {
             return true
         }
@@ -96,7 +93,7 @@ class LoginActivity : AppCompatActivity() {
         var registrationEmail = "${registrationData.getStringExtra("email")}"
         var registrationPassword = "${registrationData.getStringExtra("password")}"
 
-        if(registrationEmail != "null" && registrationPassword != "null"){
+        if (registrationEmail != "null" && registrationPassword != "null") {
             emailField.setText(registrationEmail)
             passwordField.setText(registrationPassword)
             attemptLogin(registrationEmail, registrationPassword)

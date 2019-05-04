@@ -16,6 +16,8 @@ class LockActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock)
 
+        var firebaseObj = FirebaseHelper()
+
         FirebaseAuth.AuthStateListener { auth ->
             val user = auth.currentUser
             if (user != null) {
@@ -23,8 +25,8 @@ class LockActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-        val user = FirebaseAuth.getInstance().currentUser
-        if (user == null) {
+
+        if (!firebaseObj.isUserLoggedIn()) {
             val intent = Intent(this, PreLoginActivity::class.java)
             startActivity(intent)
         }
