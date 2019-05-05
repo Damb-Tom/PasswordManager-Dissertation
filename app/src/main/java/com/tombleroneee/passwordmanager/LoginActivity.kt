@@ -15,17 +15,13 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var user: FirebaseUser
     private var stayLoggedIn: Boolean = false
 
-    private fun createToast(text: String, stayTime: Int) {
-        Toast.makeText(baseContext, text, stayTime).show()
-    }
-
     private fun attemptLogin(email: String, password: String) {
         if (email.isEmpty() || password.isEmpty()) {
-            createToast("Please enter an Email and Password!", Toast.LENGTH_SHORT)
+            NotificationHelper.createToast(applicationContext, "Please enter an Email and Password!", Toast.LENGTH_SHORT)
             return
         }
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            createToast("Invalid Email Address!", Toast.LENGTH_SHORT)
+            NotificationHelper.createToast(applicationContext, "Invalid Email Address!", Toast.LENGTH_SHORT)
             return
         }
 
@@ -33,7 +29,7 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     if (validateEmail()) {
-                        createToast("Successfully Logged In!", Toast.LENGTH_SHORT)
+                        NotificationHelper.createToast(applicationContext, "Successfully Logged In!", Toast.LENGTH_SHORT)
 
                         val pinLock = PinLockHelper(applicationContext)
                         val pinAlreadyCreated = pinLock.isPinCreated()
@@ -47,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
                 } else {
-                    createToast("Invalid Username or Password, try again!", Toast.LENGTH_SHORT)
+                    NotificationHelper.createToast(applicationContext, "Invalid Username or Password, try again!", Toast.LENGTH_SHORT)
                     passwordField.setText("")
                 }
             }
@@ -63,9 +59,9 @@ class LoginActivity : AppCompatActivity() {
         user.sendEmailVerification()
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    createToast("Verification Email sent to ${user.email}", Toast.LENGTH_SHORT)
+                    NotificationHelper.createToast(applicationContext, "Verification Email sent to ${user.email}", Toast.LENGTH_SHORT)
                 } else {
-                    createToast("Verification failed!", Toast.LENGTH_SHORT)
+                    NotificationHelper.createToast(applicationContext, "Verification failed!", Toast.LENGTH_SHORT)
                 }
             }
         return emailVerified
@@ -102,7 +98,7 @@ class LoginActivity : AppCompatActivity() {
         forgotPasswordText.setOnClickListener {
             var email = emailField.text.toString()
             if (email.isEmpty()) {
-                createToast("Please enter an Email!", Toast.LENGTH_SHORT)
+                NotificationHelper.createToast(applicationContext, "Please enter an Email!", Toast.LENGTH_SHORT)
                 return@setOnClickListener
             }
 

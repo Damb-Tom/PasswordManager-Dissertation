@@ -130,8 +130,12 @@ class MainActivityTabbed : AppCompatActivity() {
                     rootView = inflater.inflate(R.layout.fragment_main_activity_tabbed, container, false)
 
                     if (!firstRun) {
-                        Snackbar.make(rootView, "Swipe left and right to navigate pages!", Snackbar.LENGTH_INDEFINITE)
-                            .setAction("Hide Tip") {}.show()
+                        NotificationHelper.createSnack(
+                            rootView,
+                            "Swipe left and right to navigate pages!",
+                            "Hide Tip",
+                            Snackbar.LENGTH_INDEFINITE
+                        )
                         firstRun = true
                     }
 
@@ -265,7 +269,11 @@ class MainActivityTabbed : AppCompatActivity() {
                             )
                             rootView.txtGeneratedPass.setText(pass)
                         } else {
-                            Toast.makeText(context, "Please select password properties!", Toast.LENGTH_SHORT).show()
+                            NotificationHelper.createToast(
+                                context!!,
+                                "Please select password properties!",
+                                Toast.LENGTH_SHORT
+                            )
                         }
                     }
                     rootView.btnCopy.setOnClickListener {
@@ -273,7 +281,7 @@ class MainActivityTabbed : AppCompatActivity() {
                             this.context!!.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
                         val textToCopy = ClipData.newPlainText("text", rootView.txtGeneratedPass.text)
                         clipboardManager?.primaryClip = textToCopy
-                        Toast.makeText(context, "Copied password to clipboard!", Toast.LENGTH_SHORT).show()
+                        NotificationHelper.createToast(context!!, "Copied password to clipboard!", Toast.LENGTH_SHORT)
                     }
                     rootView.btnSave.setOnClickListener {
                         val user = FirebaseAuth.getInstance().currentUser
@@ -388,7 +396,7 @@ class MainActivityTabbed : AppCompatActivity() {
             signOutDialogBox.setPositiveButton("Yes") { dialog, _ ->
                 dialog.dismiss()
 
-                Toast.makeText(baseContext, "Signed out successfully!", Toast.LENGTH_SHORT).show()
+                NotificationHelper.createToast(baseContext, "Signed out successfully!", Toast.LENGTH_SHORT)
                 FirebaseAuth.getInstance().signOut()
                 startActivity(Intent(this@MainActivityTabbed, PreLoginActivity::class.java))
             }

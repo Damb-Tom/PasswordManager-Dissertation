@@ -13,16 +13,12 @@ class RegisterActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
 
-    private fun createToast(text: String, stayTime: Int) {
-        Toast.makeText(baseContext, text, stayTime).show()
-    }
-
     private fun updateDisplayName(name: String){
         val user = auth.currentUser
         if(user != null) {
             user.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(name).build())
         }else{
-            Toast.makeText(baseContext, "Error adding a Display Name!", Toast.LENGTH_SHORT).show()
+            NotificationHelper.createToast(baseContext, "Error adding a Display Name!", Toast.LENGTH_SHORT)
         }
     }
 
@@ -39,13 +35,13 @@ class RegisterActivity : AppCompatActivity() {
             val passwordConfirm = passwordInputFieldConfirmation.text.toString()
 
             if(password != passwordConfirm){
-                createToast("Passwords don't match!", Toast.LENGTH_SHORT)
+                NotificationHelper.createToast(applicationContext, "Passwords don't match!", Toast.LENGTH_SHORT)
             }
             if(name.isEmpty() || email.isEmpty() || password.isEmpty() || passwordConfirm.isEmpty()){
-                createToast("Please enter a Display Name, Email and Password!", Toast.LENGTH_SHORT)
+                NotificationHelper.createToast(applicationContext,"Please enter a Display Name, Email and Password!", Toast.LENGTH_SHORT)
             }
             if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                createToast("Invalid Email Address!", Toast.LENGTH_SHORT)
+                NotificationHelper.createToast(applicationContext,"Invalid Email Address!", Toast.LENGTH_SHORT)
                 return@setOnClickListener
             }
 
@@ -62,7 +58,7 @@ class RegisterActivity : AppCompatActivity() {
                         startActivity(intent)
                     } else {
                         var e = task.exception
-                        createToast("Error: ${e!!.message}", Toast.LENGTH_SHORT)
+                        NotificationHelper.createToast(applicationContext,"Error: ${e!!.message}", Toast.LENGTH_SHORT)
                     }
                 }
         }
