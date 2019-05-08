@@ -4,7 +4,7 @@ class PasswordGeneratorHelper {
     fun generatePassword(length: Int, letters: Boolean, symbols: Boolean, numbers: Boolean): String {
         var generatedPasswordChars = ""
         val usableLetters = "abcdefghijklmnopqrstuvwxyz"
-        val usableSymbols = "!@£$%^&*(){}[]:<>,.?/`§"
+        val usableSymbols = "!@£$%^&*(){}[]:<>,.?/`"
         val usableNumbers = "1234567890"
 
         if (letters)
