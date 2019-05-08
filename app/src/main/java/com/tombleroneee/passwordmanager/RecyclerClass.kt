@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,26 +22,26 @@ import kotlinx.android.synthetic.main.list_layout.view.*
 class RecyclerClass(private val recyclerList: ArrayList<RecyclerData>, val context: Context?) :
     RecyclerView.Adapter<RecyclerClass.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerClass.ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_layout, parent, false), context)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(recyclerList, LayoutInflater.from(parent.context).inflate(R.layout.list_layout, parent, false), context)
     }
 
     override fun getItemCount(): Int {
         return recyclerList.size
     }
 
-    override fun onBindViewHolder(holder: RecyclerClass.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.mainTitle.text = recyclerList[position].title
         holder.itemView.tag = position
     }
 
-    class ViewHolder(itemView: View, val context: Context?) : RecyclerView.ViewHolder(itemView),
+    class ViewHolder(private val recyclerList: ArrayList<RecyclerData>, itemView: View, val context: Context?) : RecyclerView.ViewHolder(itemView),
         View.OnLongClickListener, View.OnClickListener {
         override fun onClick(v: View?) {
             val intent = Intent(context, SelectedPasswordActivity::class.java).apply {
-                putExtra("TITLE", recyclerListList[v!!.tag.toString().toInt()].title)
-                putExtra("USERNAME", recyclerListList[v.tag.toString().toInt()].username)
-                putExtra("PASSWORD", recyclerListList[v.tag.toString().toInt()].password)
+                putExtra("TITLE", recyclerList[v!!.tag.toString().toInt()].title)
+                putExtra("USERNAME", recyclerList[v!!.tag.toString().toInt()].username)
+                putExtra("PASSWORD", recyclerList[v!!.tag.toString().toInt()].password)
             }
             val bundle = intent.extras
             if (context != null) {
@@ -70,9 +71,9 @@ class RecyclerClass(private val recyclerList: ArrayList<RecyclerData>, val conte
 
                 setPositiveButton("Delete") { dialog, _ ->
                     dialog.dismiss()
-                    recyclerListList[v!!.tag.toString().toInt()].titleRef.setValue(null)
-                    recyclerListList[v.tag.toString().toInt()].usernameRef.setValue(null)
-                    recyclerListList[v.tag.toString().toInt()].passwordRef.setValue(null)
+                    recyclerList[v!!.tag.toString().toInt()].titleRef.setValue(null)
+                    recyclerList[v.tag.toString().toInt()].usernameRef.setValue(null)
+                    recyclerList[v.tag.toString().toInt()].passwordRef.setValue(null)
                 }
 
                 setNegativeButton("Edit") { dialog, _ ->
@@ -83,7 +84,7 @@ class RecyclerClass(private val recyclerList: ArrayList<RecyclerData>, val conte
 
 
                     EditText(context).apply {
-                        setText(recyclerListList[v!!.tag.toString().toInt()].title)
+                        setText(recyclerList[v!!.tag.toString().toInt()].title)
                         hint = "Website"
                         setTextColor(ContextCompat.getColor(context, R.color.White))
                         setHintTextColor(ContextCompat.getColor(context, R.color.lightWhite))
@@ -93,7 +94,7 @@ class RecyclerClass(private val recyclerList: ArrayList<RecyclerData>, val conte
                         dialogControls.add(this)
                     }
                     EditText(context).apply {
-                        setText(recyclerListList[v!!.tag.toString().toInt()].username)
+                        setText(recyclerList[v!!.tag.toString().toInt()].username)
                         hint = "Username/Email"
                         setTextColor(ContextCompat.getColor(context, R.color.White))
                         setHintTextColor(ContextCompat.getColor(context, R.color.lightWhite))
@@ -103,7 +104,7 @@ class RecyclerClass(private val recyclerList: ArrayList<RecyclerData>, val conte
                         dialogControls.add(this)
                     }
                     EditText(context).apply {
-                        setText(recyclerListList[v!!.tag.toString().toInt()].password)
+                        setText(recyclerList[v!!.tag.toString().toInt()].password)
                         hint = "Password"
                         setTextColor(ContextCompat.getColor(context, R.color.White))
                         setHintTextColor(ContextCompat.getColor(context, R.color.lightWhite))
@@ -126,9 +127,9 @@ class RecyclerClass(private val recyclerList: ArrayList<RecyclerData>, val conte
                                 dialogControls[2].text.toString()
                             )
                             if (data.title.isNotEmpty() && data.username.isNotEmpty() && data.password.isNotEmpty()) {
-                                recyclerListList[v!!.tag.toString().toInt()].titleRef.setValue(data.title)
-                                recyclerListList[v.tag.toString().toInt()].usernameRef.setValue(data.username)
-                                recyclerListList[v.tag.toString().toInt()].passwordRef.setValue(data.password)
+                                recyclerList[v!!.tag.toString().toInt()].titleRef.setValue(data.title)
+                                recyclerList[v.tag.toString().toInt()].usernameRef.setValue(data.username)
+                                recyclerList[v.tag.toString().toInt()].passwordRef.setValue(data.password)
                             }
                         }
 
