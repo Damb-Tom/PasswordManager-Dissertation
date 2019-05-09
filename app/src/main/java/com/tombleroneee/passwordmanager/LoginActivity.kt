@@ -76,6 +76,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         auth = FirebaseAuth.getInstance()
+        user = auth.currentUser!!
 
         var settings = applicationContext.getSharedPreferences("USER_DATA", 0)
         stayLoggedIn = settings.getBoolean("stayLoggedIn", false)
