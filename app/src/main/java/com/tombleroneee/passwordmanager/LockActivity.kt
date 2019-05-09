@@ -6,17 +6,24 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_lock.*
 
 
 class LockActivity : AppCompatActivity() {
 
+    var auth: FirebaseAuth = FirebaseAuth.getInstance()
+
+    private fun isUserLoggedIn(): Boolean {
+        val user = auth.currentUser
+        return user != null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock)
 
-        var firebaseObj = FirebaseHelper()
+        auth = FirebaseAuth.getInstance()
 
         FirebaseAuth.AuthStateListener { auth ->
             val user = auth.currentUser
@@ -26,7 +33,7 @@ class LockActivity : AppCompatActivity() {
             }
         }
 
-        if (!firebaseObj.isUserLoggedIn()) {
+        if (!isUserLoggedIn()) {
             val intent = Intent(this, PreLoginActivity::class.java)
             startActivity(intent)
         }

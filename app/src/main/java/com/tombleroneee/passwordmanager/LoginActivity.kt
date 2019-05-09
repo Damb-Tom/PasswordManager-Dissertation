@@ -49,9 +49,13 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
+    private fun isEmailVerified(): Boolean {
+        val user = auth.currentUser
+        return user!!.isEmailVerified
+    }
+
     private fun validateEmail(): Boolean {
-        var firebaseObj = FirebaseHelper()
-        var emailVerified = firebaseObj.isEmailVerified()
+        var emailVerified = isEmailVerified()
         if (emailVerified) {
             return true
         }
