@@ -2,6 +2,8 @@
 
 ### Details:
 
-Name: PasswordManager
+Name: Password Manager
+
 Language: Kotlin
+
 Software: Android Studio
